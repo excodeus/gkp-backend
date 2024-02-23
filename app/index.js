@@ -7,6 +7,7 @@ require('dotenv').config()
 
 const startApp = async () => {
     try {
+        // init dev
         // express app
         const app = express();
 
