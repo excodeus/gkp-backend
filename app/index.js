@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const routes = require('./routes');
 
 // run dotenv
 require('dotenv').config()
@@ -20,9 +21,8 @@ const startApp = async () => {
         app.use(cors());
         
         // routes
-        app.get('/ping', (req, res) => {
-            res.send('pong!');
-        });
+        const baseUrl = process.env.BASE_URL;
+        app.use(baseUrl, routes);
 
         // port app
         const port = process.env.APP_PORT || 3000;
