@@ -1,14 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const routes = require('./routes');
+const mySQLConnection = require('./app/providers/mysql/index.js');
+const routes = require('./app/routes/index.js');
 
 // run dotenv
 require('dotenv').config()
 
 const startApp = async () => {
     try {
-        // init dev
         // express app
         const app = express();
 
@@ -19,7 +19,14 @@ const startApp = async () => {
         
         // cors
         app.use(cors());
-        
+
+        // mysql
+        const mySQLConn = await mySQLConnection();
+        if (mySQLConn) {
+            console.log('Connected to MySQL');
+            mySQLConn.end();
+        }
+
         // routes
         const baseUrl = process.env.BASE_URL;
         app.use(baseUrl, routes);
