@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+const util = require('util');
 
 const mySQLConnection = async () => {
   try {
@@ -8,6 +9,9 @@ const mySQLConnection = async () => {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
     });
+
+    // Promisify the query method
+    connection.query = util.promisify(connection.query);
 
     return connection;
   } catch (error) {
