@@ -7,6 +7,9 @@ const {
     createCareer, 
     deleteCareer,
 } = require('../repositories/career_repository');
+const careerModelValidator = require('../utils/validator/career_model_validator');
+const uuid = require('uuid');
+const careerModel = require('../models/career');
 
 const getAllCareerAdminService = async(page, limit, status = 'all') => {
     try {
@@ -25,6 +28,30 @@ const getAllCareerAdminService = async(page, limit, status = 'all') => {
     }
 };
 
+const postCareerAdminService = async(payload) => {
+    try {
+        // time variable
+        const currentMillis = Date.now();
+
+        // add more parameter
+        payload.id = uuid.v4();
+        payload.status = true;
+        payload.created_at = currentMillis;
+        payload.updated_at = currentMillis;
+
+        // validate model
+        const data = careerModel(payload);
+
+        // insert data
+        const id = await createCareer(payload);
+
+        return {id};
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
-    getAllCareerAdminService
+    getAllCareerAdminService,
+    postCareerAdminService,
 };

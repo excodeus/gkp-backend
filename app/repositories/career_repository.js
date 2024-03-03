@@ -27,7 +27,7 @@ const getAllCareer = async (limit, offset, status) => {
 const getCareerById = async (id) => {
     try {
         const connection = await mySQLConnection();
-        const [careerData] = connection.query('SELECT id, name, position, status, description, updated_at FROM careers WHERE id = ? ORDER BY updated_at ASC', [id]);
+        const [careerData] = await connection.query('SELECT id, name, position, status, description, updated_at FROM careers WHERE id = ? ORDER BY updated_at ASC', [id]);
         connection.end();
         
         return careerData;
@@ -40,7 +40,7 @@ const updateCareer = async (data) => {
     try {
         const connection = await mySQLConnection();
         const {id, name, position, status, description, updated_at} = data;
-        const [updateId] = connection.query('UPDATE careers SET name = ?, position = ?, status = ?, description = ?, updated_at = ? WHERE id = ? RETURNING id', [name, position, status, description, updated_at, id]);
+        const [updateId] = await connection.query('UPDATE careers SET name = ?, position = ?, status = ?, description = ?, updated_at = ? WHERE id = ? RETURNING id', [name, position, status, description, updated_at, id]);
         connection.end();
         
         return updateId;
@@ -63,9 +63,9 @@ const createCareer = async (data) => {
             created_at,
             updated_at
         } = data;
-        
-        const [careerId] = connection.query(
-        "INSERT INTO users (id, name, position, status, description, created_at, updated_at) VALUES(?,?,?,?,?,?,?) RETURNING id",
+
+        await connection.query(
+        "INSERT INTO careers (id, name, position, status, description, created_at, updated_at) VALUES(?,?,?,?,?,?,?)",
             [
                 id,
                 name,
@@ -79,7 +79,7 @@ const createCareer = async (data) => {
 
         connection.end();
 
-        return careerId;
+        return id;
     } catch (error) {
         throw error;
     }
@@ -89,7 +89,7 @@ const deleteCareer = async (id) => {
     try {
         const connection = await mySQLConnection();
         
-        const [deletedId] = connection.query('DELETE FROM users WHERE id = ? RETURNING id', [id]);
+        const [deletedId] = await connection.query('DELETE FROM careers WHERE id = ? RETURNING id', [id]);
         connection.end();
         
         return deletedId;

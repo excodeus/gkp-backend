@@ -1,8 +1,10 @@
 const httpStatus = require('http-status');
 const {
     getAllCareerAdminService,
+    postCareerAdminService,
 } = require('../services/career_services');
 const {responseSuccess, responseError} = require('../utils/responses');
+const careerPostValidator = require('../utils/validator/career_validator');
 
 
 const getAllCareerAdmin = async(req, res) => {
@@ -34,12 +36,26 @@ const getAllCareerAdmin = async(req, res) => {
         let data, totalPage = await getAllCareerAdminService(pageInt, limitInt, status);
 
         return responseSuccess(true, res, httpStatus.OK, "success get all careers", data, pageInt, limitInt, totalPage);
-
     } catch (error) {
-        throw error;
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
+    }
+};
+
+const postCareerAdmin = async(req, res) => {
+    try {
+        // get body json
+        const request = await careerPostValidator.validateAsync(req.body);
+
+        // post data and get id
+        const dataId = await postCareerAdminService(request);
+
+        return responseSuccess(false, res, httpStatus.CREATED, "success create career", dataId);
+    } catch (error) {
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };
 
 module.exports = {
-    getAllCareerAdmin
+    getAllCareerAdmin,
+    postCareerAdmin
 };

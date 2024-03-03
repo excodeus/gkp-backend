@@ -4,7 +4,7 @@ const careerModel = (payload) => {
     // validate
     const { error, value } = careerModelValidator.validate(payload);
     // return payload
-    return value, error;
+    return value;
 };
 
 module.exports = careerModel;
