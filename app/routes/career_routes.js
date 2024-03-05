@@ -2,6 +2,9 @@ const express = require('express');
 const {
     getAllCareerAdmin,
     postCareerAdmin,
+    getDetailCareerAdmin,
+    putCareerAdmin,
+    deleteCareerAdmin,
 } = require('../controllers/career_controllers');
 
 const careerAdminFuncRouter = () => {
@@ -10,9 +13,9 @@ const careerAdminFuncRouter = () => {
     // career administrator endpoint
     careerRoutes.get("/", getAllCareerAdmin);
     careerRoutes.post("/", postCareerAdmin);
-    // careerRoutes.get(`/${administrator_url}/${career_url}/{id}`, getDetailCareerAdmin);
-    // careerRoutes.put(`/${administrator_url}/${career_url}/{id}`, putCareerAdmin);
-    // careerRoutes.delete(`/${administrator_url}/${career_url}/{id}`, deleteCareerAdmin);
+    careerRoutes.get("/:id", getDetailCareerAdmin);
+    careerRoutes.put("/:id", putCareerAdmin);
+    careerRoutes.delete("/:id", deleteCareerAdmin);
 
     return careerRoutes;
 };

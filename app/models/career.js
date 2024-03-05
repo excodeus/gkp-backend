@@ -1,8 +1,19 @@
-const careerModelValidator = require('../utils/validator/career_model_validator.js');
+const {
+    careerModelCreateValidator,
+    careerModelUpdateValidator,
+} = require('../utils/validator/career_model_validator.js');
 
-const careerModel = (payload) => {
+const careerModel = (payload, isCreate) => {
+    let error; let value;
+    
     // validate
-    const { error, value } = careerModelValidator.validate(payload);
+    if (isCreate) {
+        // create
+        error, value = careerModelCreateValidator.validate(payload);
+    } else {
+        // update
+        error, value = careerModelUpdateValidator.validate(payload);
+    }
     // return payload
     return value;
 };

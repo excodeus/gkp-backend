@@ -8,7 +8,7 @@ const responseSuccess = (isGetAll, response, statusCode, message = '', data = []
     if (isGetAll) {
         responseData['totalPage'] = totalPage;
         responseData['currentPage'] = page;
-        responseData['limit'] = limit;
+        responseData['limitPage'] = limit;
     }
     return response.status(statusCode).json(responseData);
 }

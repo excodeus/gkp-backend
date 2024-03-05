@@ -6,4 +6,14 @@ const careerPostValidator = Joi.object({
     description: Joi.string().required(),
 });
 
-module.exports = careerPostValidator;
+const careerUpdateValidator = Joi.object({
+    name: Joi.string(),
+    position: Joi.string(),
+    status: Joi.boolean(),
+    description: Joi.string(),
+});
+
+module.exports = {
+    careerPostValidator,
+    careerUpdateValidator
+};

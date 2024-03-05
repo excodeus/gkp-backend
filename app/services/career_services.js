@@ -7,7 +7,6 @@ const {
     createCareer, 
     deleteCareer,
 } = require('../repositories/career_repository');
-const careerModelValidator = require('../utils/validator/career_model_validator');
 const uuid = require('uuid');
 const careerModel = require('../models/career');
 
@@ -17,21 +16,35 @@ const getAllCareerAdminService = async(page, limit, status = 'all') => {
         const rawPage = await getCountCareerPages();
 
         // converter pagination
-        let {offset, totalPages} = paginateConverter(page, limit, rawPage);
+        const {offset, totalPages} = paginateConverter(page, limit, rawPage);
+
+        // status conf
+        const configStatus = {
+            "closed": 0,
+            "open": 1
+        };
+
+        // valid status to boolean
+        const validStatus = configStatus[status];
 
         // get data
-        const data = await getAllCareer(limit, offset, status);
+        if (status === 'all') {
+            data = await getAllCareer(limit, offset);
+        } else {
+            data = await getAllCareer(limit, offset, validStatus);
+        }
 
-        return data, totalPages;
+        return {data, totalPages};
     } catch (error) {
         throw error;
     }
 };
 
+// time variable
+const currentMillis = Date.now();
+
 const postCareerAdminService = async(payload) => {
     try {
-        // time variable
-        const currentMillis = Date.now();
 
         // add more parameter
         payload.id = uuid.v4();
@@ -40,12 +53,51 @@ const postCareerAdminService = async(payload) => {
         payload.updated_at = currentMillis;
 
         // validate model
-        const data = careerModel(payload);
+        const data = careerModel(payload, true);
 
         // insert data
-        const id = await createCareer(payload);
+        const id = await createCareer(data);
 
         return {id};
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getCareerByIdAdminService = async(id) => {
+    try {
+        // get data by id
+        const data = await getCareerById(id);
+
+        return data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const putCareerByIdAdminService = async(payload, reqId) => {
+    try {
+        // set time update and id
+        payload.id = reqId;
+        payload.updated_at = currentMillis;
+
+        // validate model
+        const data = careerModel(payload, false);
+        // get payload by id
+        const id = await updateCareer(data);
+
+        return id;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const deleteCareerAdminService = async(id) => {
+    try {
+        // delete return id
+        const data = await deleteCareer(id);
+
+        return {id: data};
     } catch (error) {
         throw error;
     }
@@ -54,4 +106,7 @@ const postCareerAdminService = async(payload) => {
 module.exports = {
     getAllCareerAdminService,
     postCareerAdminService,
+    getCareerByIdAdminService,
+    putCareerByIdAdminService,
+    deleteCareerAdminService,
 };
