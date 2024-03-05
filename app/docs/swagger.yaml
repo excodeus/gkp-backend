@@ -571,6 +571,12 @@ paths:
                     type: boolean
                   message:
                     type: string
+                  totalPage:
+                    type: number
+                  currentPage:
+                    type: number
+                  limitPage:
+                    type: number
                   data:
                     type: array
                     items:
@@ -587,6 +593,9 @@ paths:
               example:
                 error: false
                 message: success get all careers
+                totalPage: 1
+                currentPage: 1
+                limitPage: 10
                 data:
                   - id: sdasd-asd123-asd12-ddd3
                     name: tepung
@@ -847,6 +856,12 @@ paths:
                     type: boolean
                   message:
                     type: string
+                  totalPage:
+                    type: number
+                  currentPage:
+                    type: number
+                  limitPage:
+                    type: number
                   data:
                     type: array
                     items:
@@ -861,6 +876,9 @@ paths:
               example:
                 error: false
                 message: success get all categories
+                totalPage: 1
+                currentPage: 1
+                limitPage: 10
                 data:
                   - id: sdasd-asd123-asd12-ddd3
                     name: makanan
@@ -1207,6 +1225,12 @@ paths:
                     type: boolean
                   message:
                     type: string
+                  totalPage:
+                    type: number
+                  currentPage:
+                    type: number
+                  limitPage:
+                    type: number
                   data:
                     type: array
                     items:
@@ -1221,6 +1245,9 @@ paths:
               example:
                 error: false
                 message: success get all products
+                totalPage: 1
+                currentPage: 1
+                limitPage: 10
                 data:
                   - id: sdasd-asd123-asd12-ddd3
                     product_name: tepung
@@ -1564,6 +1591,12 @@ paths:
                     type: boolean
                   message:
                     type: string
+                  totalPage:
+                    type: number
+                  currentPage:
+                    type: number
+                  limitPage:
+                    type: number
                   data:
                     type: array
                     items:
@@ -1580,6 +1613,9 @@ paths:
               example:
                 error: false
                 message: success get all galleries
+                totalPage: 1
+                currentPage: 1
+                limitPage: 10
                 data:
                   - id: sdasd-asd123-asd12-ddd3
                     name: gallery 1
