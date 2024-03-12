@@ -4,6 +4,7 @@ const swaggerUi = require('swagger-ui-express');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const careerAdminFuncRouter = require('./career_routes');
+const categoryAdminFuncRouter = require('./category_routes');
 
 // run dotenv
 require('dotenv').config()
@@ -14,10 +15,15 @@ const routes = express();
  // env variable router
 const administrator_url = process.env.ADMINISTRATOR_URL;
 const career_url = process.env.CAREER_URL;
+const category_url = process.env.CATEGORY_URL;
 
 // career routes list grouping
 const careerAdminRoutes = careerAdminFuncRouter();
 routes.use(`/${administrator_url}/${career_url}`, careerAdminRoutes);
+
+// category routes list grouping
+const categoryAdminRoutes = categoryAdminFuncRouter();
+routes.use(`/${administrator_url}/${category_url}`, categoryAdminRoutes);
 
 // swagger
 // Read and process Swagger YAML

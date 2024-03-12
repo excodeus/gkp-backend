@@ -61,7 +61,6 @@ const updateCareer = async (data) => {
     try {
         const connection = await mySQLConnection();
         const {id, name, position, status, description, updated_at} = data.value;
-        // await connection.query('UPDATE careers SET name = ?, position = ?, status = ?, description = ?, updated_at = ? WHERE id = ?', [name, position, status, description, updated_at, id]);
         
         // Build the SET part of the query dynamically based on the provided data
         let sets = [];
