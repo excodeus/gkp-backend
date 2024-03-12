@@ -45,8 +45,7 @@ const getAllCareerAdmin = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success get all careers", data, pageInt, limitInt, totalPages);
     } catch (error) {
-        throw error
-        // return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };
 
@@ -91,8 +90,7 @@ const putCareerAdmin = async(req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "success update career", dataId);
     } catch (error) {
-        throw error
-        // return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };
 

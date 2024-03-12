@@ -832,16 +832,6 @@ paths:
             example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.y3kjst36zujMF4HssVk3Uqxf_3bzumNAvOB9N0_uRV4
           required: true
           description: Fill with Access Token
-        - in: query
-          name: page
-          schema:
-            type: number
-            example: 2
-        - in: query
-          name: limit
-          schema:
-            type: number
-            example: 10
       security:
         - bearerAuthAccess: []
       responses:
@@ -856,12 +846,6 @@ paths:
                     type: boolean
                   message:
                     type: string
-                  totalPage:
-                    type: number
-                  currentPage:
-                    type: number
-                  limitPage:
-                    type: number
                   data:
                     type: array
                     items:
@@ -876,9 +860,6 @@ paths:
               example:
                 error: false
                 message: success get all categories
-                totalPage: 1
-                currentPage: 1
-                limitPage: 10
                 data:
                   - id: sdasd-asd123-asd12-ddd3
                     name: makanan
