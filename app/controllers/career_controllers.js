@@ -37,11 +37,6 @@ const getAllCareerAdmin = async(req, res) => {
 
         // get data and total page
         const {data, totalPages} = await getAllCareerAdminService(pageInt, limitInt, status);
-        
-        // Check if data exists and is not empty
-        if (!data || Object.keys(data).length === 0) {
-            return responseError(res, httpStatus.NOT_FOUND, "No careers found");
-        }
 
         return responseSuccess(true, res, httpStatus.OK, "success get all careers", data, pageInt, limitInt, totalPages);
     } catch (error) {
@@ -73,6 +68,9 @@ const getDetailCareerAdmin = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success get career by id", data);
     } catch (error) {
+        if (error.message === "id not found") {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };
@@ -90,6 +88,9 @@ const putCareerAdmin = async(req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "success update career", dataId);
     } catch (error) {
+        if (error.message === "id not found") {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };
@@ -104,6 +105,9 @@ const deleteCareerAdmin = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success delete career by id", data);
     } catch (error) {
+        if (error.message === "id not found") {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };

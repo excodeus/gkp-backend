@@ -39,8 +39,12 @@ const getAllCareer = async (limit, offset, status) => {
 const getCareerById = async (id) => {
     try {
         const connection = await mySQLConnection();
-        const [careerData] = await connection.query('SELECT id, name, position, status, description, updated_at FROM careers WHERE id = ? ORDER BY updated_at ASC', [id]);
+        const [careerData] = await connection.query('SELECT id, name, position, status, description, updated_at FROM careers WHERE id = ? ORDER BY updated_at ASC LIMIT 1', [id]);
         connection.end();
+
+        if (careerData === undefined) {
+            throw new Error("id not found");
+        }
         // Convert status to boolean
         const career = {
             id: careerData.id,
@@ -94,9 +98,12 @@ const updateCareer = async (data) => {
         // Execute the query with dynamic SET part
         const query = `UPDATE careers SET ${setString} WHERE id = ?`;
         values.push(id);
-        await connection.query(query, values);
-        
+        const result = await connection.query(query, values);
         connection.end();
+
+        if (result.affectedRows === 0) {
+            throw new Error("id not found");
+        }
         
         return id;
     } catch (error) {
@@ -116,7 +123,7 @@ const createCareer = async (data) => {
             description,
             created_at,
             updated_at
-        } = data;
+        } = data.value;
 
         await connection.query(
         "INSERT INTO careers (id, name, position, status, description, created_at, updated_at) VALUES(?,?,?,?,?,?,?)",
@@ -142,8 +149,12 @@ const createCareer = async (data) => {
 const deleteCareer = async(id) => {
     try {
         const connection = await mySQLConnection();
-        await connection.query('DELETE FROM careers WHERE id = ?', [id]);
+        const result = await connection.query('DELETE FROM careers WHERE id = ?', [id]);
         connection.end();
+
+        if (result.affectedRows === 0) {
+            throw new Error("id not found");
+        }
         
         return id;
     } catch (error) {
