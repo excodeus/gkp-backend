@@ -12,6 +12,18 @@ const getAllCategory = async () => {
     }
 };
 
+const getCategoryById = async (category_id) => {
+    try {
+        const connection = await mySQLConnection();
+        const [categoryData] = await connection.query('SELECT * FROM categories WHERE id = ? LIMIT 1', [category_id]);
+        connection.end();
+
+        return categoryData;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const updateCategory = async (data) => {
     try {
         const connection = await mySQLConnection();
@@ -96,6 +108,7 @@ const deleteCategory = async(id) => {
 
 module.exports = {
     getAllCategory, 
+    getCategoryById,
     updateCategory, 
     createCategory, 
     deleteCategory,
