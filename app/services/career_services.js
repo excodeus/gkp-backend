@@ -47,7 +47,7 @@ const postCareerAdminService = async(payload) => {
     try {
 
         // add more parameter
-        payload.id = uuid.v4();
+        payload.id =  "CR-" + uuid.v4();
         payload.status = true;
         payload.created_at = currentMillis;
         payload.updated_at = currentMillis;

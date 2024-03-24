@@ -1,10 +1,12 @@
 const express = require('express');
 const httpStatus = require('http-status');
+const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const careerAdminFuncRouter = require('./career_routes');
 const categoryAdminFuncRouter = require('./category_routes');
+const productAdminFuncRouter = require('./product_routes');
 
 // run dotenv
 require('dotenv').config()
@@ -16,6 +18,8 @@ const routes = express();
 const administrator_url = process.env.ADMINISTRATOR_URL;
 const career_url = process.env.CAREER_URL;
 const category_url = process.env.CATEGORY_URL;
+const product_url = process.env.PRODUCT_URL;
+const gallery_url = process.env.GALLERY_URL;
 
 // career routes list grouping
 const careerAdminRoutes = careerAdminFuncRouter();
@@ -24,6 +28,10 @@ routes.use(`/${administrator_url}/${career_url}`, careerAdminRoutes);
 // category routes list grouping
 const categoryAdminRoutes = categoryAdminFuncRouter();
 routes.use(`/${administrator_url}/${category_url}`, categoryAdminRoutes);
+
+// product routes list grouping
+const productAdminRoutes = productAdminFuncRouter();
+routes.use(`/${administrator_url}/${product_url}`, productAdminRoutes);
 
 // swagger
 // Read and process Swagger YAML
@@ -36,6 +44,10 @@ const swaggerDocument = yaml.load(processedSwaggerYaml);
 // Serve Swagger documentation
 routes.use(process.env.SWAGGER_URL, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+// show images
+const ROOT_DIR = path.resolve(__dirname, '../..');
+routes.use(`/images/${product_url}/`, express.static(`${ROOT_DIR}/storage/uploads/${product_url}`));
+routes.use(`/images/${gallery_url}/`, express.static(`${ROOT_DIR}/storage/uploads/${product_url}`));
 
 // test endpoint
 routes.get('/ping', (req, res) => {

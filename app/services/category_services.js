@@ -24,7 +24,7 @@ const currentMillis = Date.now();
 const postCategoryAdminService = async(payload) => {
     try {
         // add more parameter
-        payload.id = uuid.v4();
+        payload.id = "CT-" +uuid.v4();
         payload.created_at = currentMillis;
         payload.updated_at = currentMillis;
 
