@@ -1,14 +1,14 @@
 const httpStatus = require('http-status');
 const {
-    getAllProductsService,
-    getProductByIdService,
-    createProductService,
-    updateProductService,
-    deleteProductService
-} = require('../services/product_services');
+    getAllGalleriesService,
+    getGalleryByIdService,
+    createGalleryService,
+    updateGalleryService,
+    deleteGalleryService
+} = require('../services/gallery_services');
 const { responseSuccess, responseError } = require('../utils/responses');
 
-const getAllProductsAdmin = async (req, res) => {
+const getAllGalleriesAdmin = async (req, res) => {
     try {
         const {page, limit} = req.query;
         
@@ -29,27 +29,27 @@ const getAllProductsAdmin = async (req, res) => {
         // should positive number
         +pageInt; +limitInt;
 
-        const {products, totalPages} = await getAllProductsService(pageInt, limitInt);
-        return responseSuccess(true, res, httpStatus.OK, "Success get all products", products, pageInt, limitInt, totalPages);
+        const {galleries, totalPages} = await getAllGalleriesService(pageInt, limitInt);
+        return responseSuccess(true, res, httpStatus.OK, "Success get all galleries", galleries, pageInt, limitInt, totalPages);
     } catch (error) {
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
 
-const getProductByIdAdmin = async (req, res) => {
+const getGalleryByIdAdmin = async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await getProductByIdService(id);
-        return responseSuccess(true, res, httpStatus.OK, "Success get product by ID", product);
+        const gallery = await getGalleryByIdService(id);
+        return responseSuccess(true, res, httpStatus.OK, "Success get gallery by ID", gallery);
     } catch (error) {
-        if (error.message === "Product not found") {
-            return responseError(res, httpStatus.NOT_FOUND, "Product not found");
+        if (error.message === "Gallery not found") {
+            return responseError(res, httpStatus.NOT_FOUND, "Gallery not found");
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
 
-const postProductAdmin = async (req, res) => {
+const postGalleryAdmin = async (req, res) => {
     try {
         const { body, file, fileValidationError } = req;
 
@@ -64,16 +64,16 @@ const postProductAdmin = async (req, res) => {
             return responseError(res, httpStatus.BAD_REQUEST, 'File size limit exceeded. Max file size allowed is 5MB');
         }
 
-        const payload = { ...body, product_image: file.filename };
-        const productId = await createProductService(payload);
+        const payload = { ...body, gallery_image: file.filename };
+        const galleryId = await createGalleryService(payload);
 
-        return responseSuccess(false, res, httpStatus.CREATED, "Success create product", { productId });
+        return responseSuccess(false, res, httpStatus.CREATED, "Success create gallery", { galleryId });
     } catch (error) {
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
 
-const putProductAdmin = async (req, res) => {
+const putGalleryAdmin = async (req, res) => {
     try {
         const { params, body, file, fileValidationError } = req;
         const { id } = params;
@@ -90,35 +90,35 @@ const putProductAdmin = async (req, res) => {
         }
 
         body.id = id;
-        const payload = { ...body, product_image: file.filename };
-        const productId = await updateProductService(payload);
+        const payload = { ...body, gallery_image: file.filename };
+        const galleryId = await updateGalleryService(payload);
 
-        return responseSuccess(false, res, httpStatus.OK, "Success update product", { id: productId });
+        return responseSuccess(false, res, httpStatus.OK, "Success update gallery", { id: galleryId });
     } catch (error) {
-        if (error.message === "Product not found" || error.message === "Category ID not found") {
+        if (error.message === "Gallery not found") {
             return responseError(res, httpStatus.NOT_FOUND, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
 
-const deleteProductAdmin = async (req, res) => {
+const deleteGalleryAdmin = async (req, res) => {
     try {
         const { id } = req.params;
-        await deleteProductService(id);
-        return responseSuccess(false, res, httpStatus.OK, "Success delete product", { id });
+        await deleteGalleryService(id);
+        return responseSuccess(false, res, httpStatus.OK, "Success delete gallery", { id });
     } catch (error) {
-        if (error.message === "Product not found") {
-            return responseError(res, httpStatus.NOT_FOUND, "Product not found");
+        if (error.message === "Gallery not found") {
+            return responseError(res, httpStatus.NOT_FOUND, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
 
 module.exports = {
-    getAllProductsAdmin,
-    getProductByIdAdmin,
-    postProductAdmin,
-    putProductAdmin,
-    deleteProductAdmin
+    getAllGalleriesAdmin,
+    getGalleryByIdAdmin,
+    postGalleryAdmin,
+    putGalleryAdmin,
+    deleteGalleryAdmin
 };

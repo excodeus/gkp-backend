@@ -1,9 +1,9 @@
 const mySQLConnection = require('../providers/mysql/index');
 
-const getCountProductPages = async() => {
+const getCountGalleryPages = async() => {
     try {
         const connection = await mySQLConnection();
-        const [rows] = await connection.query('SELECT count(*) as count from products');
+        const [rows] = await connection.query('SELECT count(*) as count from galleries');
         connection.end();
         
         return rows[0]?.count;
@@ -12,50 +12,46 @@ const getCountProductPages = async() => {
     }
 };
 
-const getAllProducts = async (limit, offset) => {
+const getAllGalleries = async (limit, offset) => {
     try {
         const connection = await mySQLConnection();
-        const allProductsData = await connection.query('SELECT * FROM products ORDER BY updated_at ASC LIMIT ? OFFSET ?', [limit, offset]);
+        const allGalleriesData = await connection.query('SELECT * FROM galleries ORDER BY updated_at ASC LIMIT ? OFFSET ?', [limit, offset]);
         connection.end();
 
-        return allProductsData;
+        return allGalleriesData;
     } catch (error) {
         throw error;
     }
 };
 
-const getProductById = async (productId) => {
+const getGalleryById = async (galleryId) => {
     try {
         const connection = await mySQLConnection();
-        const [productData] = await connection.query('SELECT * FROM products WHERE id = ? LIMIT 1', [productId]);
+        const [galleryData] = await connection.query('SELECT * FROM galleries WHERE id = ? LIMIT 1', [galleryId]);
         connection.end();
 
-        return productData;
+        return galleryData;
     } catch (error) {
         throw error;
     }
 };
 
-const createProduct = async (productData) => {
+const createGallery = async (galleryData) => {
     try {
         const connection = await mySQLConnection();
         const {
             id,
-            category_id,
             name,
-            description,
-            product_image,
+            gallery_image,
             created_at,
             updated_at
-        } = productData.value;
+        } = galleryData.value;
         await connection.query(
-            "INSERT INTO products (id, category_id, name, description, product_image, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO galleries (id, name, gallery_image, created_at, updated_at) VALUES (?, ?, ?, ?, ?)",
             [
                 id,
-                category_id,
                 name,
-                description,
-                product_image,
+                gallery_image,
                 created_at,
                 updated_at
             ]
@@ -68,37 +64,27 @@ const createProduct = async (productData) => {
     }
 };
 
-const updateProduct = async (productId, productData) => {
+const updateGallery = async (galleryId, galleryData) => {
     try {
         const connection = await mySQLConnection();
         const {
-            category_id,
             name,
-            description,
-            product_image,
+            gallery_image,
             updated_at
-        } = productData.value;
+        } = galleryData.value;
         
         // Build the SET part of the query dynamically based on the provided data
         let sets = [];
         let values = [];
         
         // Check if each field exists in the data, and add it to the SET part if it does
-        if (category_id !== undefined) {
-            sets.push('category_id = ?');
-            values.push(category_id);
-        }
         if (name !== undefined) {
             sets.push('name = ?');
             values.push(name);
         }
-        if (description !== undefined) {
-            sets.push('description = ?');
-            values.push(description);
-        }
-        if (product_image !== undefined) {
-            sets.push('product_image = ?');
-            values.push(product_image);
+        if (gallery_image !== undefined) {
+            sets.push('gallery_image = ?');
+            values.push(gallery_image);
         }
         // Always include updated_at
         sets.push('updated_at = ?');
@@ -108,8 +94,8 @@ const updateProduct = async (productId, productData) => {
         const setString = sets.join(', ');
 
         // Execute the query with dynamic SET part
-        const query = `UPDATE products SET ${setString} WHERE id = ?`;
-        values.push(productId);
+        const query = `UPDATE galleries SET ${setString} WHERE id = ?`;
+        values.push(galleryId);
         const result = await connection.query(query, values);
 
         connection.end();
@@ -118,34 +104,34 @@ const updateProduct = async (productId, productData) => {
             throw new Error("Product not found");
         }
 
-        return productId;
+        return galleryId;
     } catch (error) {
         throw error;
     }
 };
 
 
-const deleteProduct = async (productId) => {
+const deleteGallery = async (galleryId) => {
     try {
         const connection = await mySQLConnection();
-        const result = await connection.query('DELETE FROM products WHERE id = ?', [productId]);
+        const result = await connection.query('DELETE FROM galleries WHERE id = ?', [galleryId]);
         connection.end();
 
         if (result.affectedRows === 0) {
             throw new Error("Product not found");
         }
 
-        return productId;
+        return galleryId;
     } catch (error) {
         throw error;
     }
 };
 
 module.exports = {
-    getCountProductPages,
-    getAllProducts,
-    getProductById,
-    createProduct,
-    updateProduct,
-    deleteProduct
+    getCountGalleryPages,
+    getAllGalleries,
+    getGalleryById,
+    createGallery,
+    updateGallery,
+    deleteGallery
 };
