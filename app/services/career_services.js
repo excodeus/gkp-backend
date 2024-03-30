@@ -17,6 +17,9 @@ const getAllCareerAdminService = async(page, limit, status = 'all') => {
 
         // converter pagination
         const {offset, totalPages} = paginateConverter(page, limit, rawPage);
+        if (page > totalPages) {
+            throw new Error("Page exceed data");
+        }
 
         // status conf
         const configStatus = {

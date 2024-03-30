@@ -40,6 +40,9 @@ const getAllCareerAdmin = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success get all careers", data, pageInt, limitInt, totalPages);
     } catch (error) {
+        if (error.message === "Page exceed data") {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };

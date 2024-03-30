@@ -7,6 +7,7 @@ const yaml = require('js-yaml');
 const careerAdminFuncRouter = require('./career_routes');
 const categoryAdminFuncRouter = require('./category_routes');
 const productAdminFuncRouter = require('./product_routes');
+const galleryAdminFuncRouter = require('./gallery_routes');
 
 // run dotenv
 require('dotenv').config()
@@ -33,6 +34,10 @@ routes.use(`/${administrator_url}/${category_url}`, categoryAdminRoutes);
 const productAdminRoutes = productAdminFuncRouter();
 routes.use(`/${administrator_url}/${product_url}`, productAdminRoutes);
 
+// gallery routes list grouping
+const galleryAdminRoutes = galleryAdminFuncRouter();
+routes.use(`/${administrator_url}/${gallery_url}`, galleryAdminRoutes);
+
 // swagger
 // Read and process Swagger YAML
 const swaggerYaml = fs.readFileSync('./app/docs/swagger.yaml', 'utf8');
@@ -47,7 +52,7 @@ routes.use(process.env.SWAGGER_URL, swaggerUi.serve, swaggerUi.setup(swaggerDocu
 // show images
 const ROOT_DIR = path.resolve(__dirname, '../..');
 routes.use(`/images/${product_url}/`, express.static(`${ROOT_DIR}/storage/uploads/${product_url}`));
-routes.use(`/images/${gallery_url}/`, express.static(`${ROOT_DIR}/storage/uploads/${product_url}`));
+routes.use(`/images/${gallery_url}/`, express.static(`${ROOT_DIR}/storage/uploads/${gallery_url}`));
 
 // test endpoint
 routes.get('/ping', (req, res) => {

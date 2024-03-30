@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
 const {
-    getCountCareerPages,
+    getCountProductPages,
     getAllProducts,
     getProductById,
     createProduct,
@@ -23,7 +23,7 @@ const product_url = process.env.PRODUCT_URL;
 const port = process.env.APP_PORT;
 
 const ROOT_DIR = path.resolve(__dirname, '../..');
-const uploadDirectory = path.join(ROOT_DIR, '/storage/uploads/products');
+const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads`);
 
 // Membuat folder upload jika belum ada
 if (!fs.existsSync(uploadDirectory)) {
@@ -35,10 +35,13 @@ const currentMillis = Date.now();
 const getAllProductsService = async (page, limit) => {
     try {
         // count total pages
-        const rawPage = await getCountCareerPages();
+        const rawPage = await getCountProductPages();
 
         // converter pagination
         const {offset, totalPages} = paginateConverter(page, limit, rawPage);
+        if (page > totalPages) {
+            throw new Error("Page exceed data");
+        }
 
         const products = await getAllProducts(limit, offset);
 
@@ -106,7 +109,6 @@ const updateProductService = async (payload) => {
         const pathDelete = `${uploadDirectory}/${product_url}/${filename}`;
         const file_product_name = payload.product_image;
         const filepath = mode_app === "PROD" ? prodHost : `http://localhost:${port}/v1`;
-
         deleteProductImage(pathDelete)
 
         payload.product_image = `${filepath}/images/${product_url}/${file_product_name}`;
@@ -123,17 +125,16 @@ const updateProductService = async (payload) => {
 const deleteProductService = async (productId) => {
     try {
         const existingProduct = await getProductById(productId);
-        if (existingProduct === undefined) {
+        if (existingProduct === undefined || !existingProduct.product_image) {
             throw new Error("Product not found");
         }
-        if (existingProduct.product_image) {
-            const url = existingProduct.product_image;
-            const urlArray = url.split('/').filter(Boolean);
-            const lastIdx = urlArray.length - 1;
-            const filename = urlArray[lastIdx];
-            const pathDelete = `${uploadDirectory}/${product_url}/${filename}`;
-            deleteProductImage(pathDelete);
-        }
+        
+        const url = existingProduct.product_image;
+        const urlArray = url.split('/').filter(Boolean);
+        const lastIdx = urlArray.length - 1;
+        const filename = urlArray[lastIdx];
+        const pathDelete = `${uploadDirectory}/${product_url}/${filename}`;
+        deleteProductImage(pathDelete);
 
         const deletedProductId = await deleteProduct(productId);
         return { productId: deletedProductId };

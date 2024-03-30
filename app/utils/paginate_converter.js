@@ -1,4 +1,4 @@
-const paginateConverter = (page, limit, rawPage = 1) => {
+const paginateConverter = (page, limit, rawPage) => {
     const offset = (page - 1) * limit;
     const totalPages = Math.ceil(rawPage / limit);
 
