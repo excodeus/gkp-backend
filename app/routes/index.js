@@ -8,6 +8,7 @@ const careerAdminFuncRouter = require('./career_routes');
 const categoryAdminFuncRouter = require('./category_routes');
 const productAdminFuncRouter = require('./product_routes');
 const galleryAdminFuncRouter = require('./gallery_routes');
+const articleAdminFuncRouter = require('./article_routes');
 
 // run dotenv
 require('dotenv').config()
@@ -21,6 +22,7 @@ const career_url = process.env.CAREER_URL;
 const category_url = process.env.CATEGORY_URL;
 const product_url = process.env.PRODUCT_URL;
 const gallery_url = process.env.GALLERY_URL;
+const article_url = process.env.ARTICLE_URL;
 
 // career routes list grouping
 const careerAdminRoutes = careerAdminFuncRouter();
@@ -37,6 +39,10 @@ routes.use(`/${administrator_url}/${product_url}`, productAdminRoutes);
 // gallery routes list grouping
 const galleryAdminRoutes = galleryAdminFuncRouter();
 routes.use(`/${administrator_url}/${gallery_url}`, galleryAdminRoutes);
+
+// article routes list grouping
+const articleAdminRoutes = articleAdminFuncRouter();
+routes.use(`/${administrator_url}/${article_url}`, articleAdminRoutes);
 
 // swagger
 // Read and process Swagger YAML

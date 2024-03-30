@@ -5,7 +5,7 @@ const productModelCreateValidator = Joi.object({
     category_id: Joi.string().required(),
     name: Joi.string().required(),
     description: Joi.string().required(),
-    product_image: Joi.boolean().required(),
+    product_image: Joi.string().required(),
     created_at: Joi.number().required(),
     updated_at: Joi.number().required(),
 });
@@ -15,7 +15,7 @@ const productModelUpdateValidator = Joi.object({
     category_id: Joi.string().required(),
     name: Joi.string(),
     description: Joi.string(),
-    product_image: Joi.boolean(),
+    product_image: Joi.string(),
     updated_at: Joi.number(),
 });
 
