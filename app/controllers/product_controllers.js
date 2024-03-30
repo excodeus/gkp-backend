@@ -32,6 +32,9 @@ const getAllProductsAdmin = async (req, res) => {
         const {products, totalPages} = await getAllProductsService(pageInt, limitInt);
         return responseSuccess(true, res, httpStatus.OK, "Success get all products", products, pageInt, limitInt, totalPages);
     } catch (error) {
+        if (error.message === "Page exceed data") {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };

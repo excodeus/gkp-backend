@@ -6,7 +6,7 @@ const getCountProductPages = async() => {
         const [rows] = await connection.query('SELECT count(*) as count from products');
         connection.end();
         
-        return rows[0]?.count;
+        return rows.count
     } catch (error) {
         throw error;
     }

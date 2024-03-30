@@ -5,8 +5,8 @@ const getCountGalleryPages = async() => {
         const connection = await mySQLConnection();
         const [rows] = await connection.query('SELECT count(*) as count from galleries');
         connection.end();
-        
-        return rows[0]?.count;
+
+        return rows.count;
     } catch (error) {
         throw error;
     }

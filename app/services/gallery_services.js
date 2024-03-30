@@ -20,7 +20,7 @@ const gallery_url = process.env.GALLERY_URL;
 const port = process.env.APP_PORT;
 
 const ROOT_DIR = path.resolve(__dirname, '../..');
-const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads/${gallery_url}`);
+const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads`);
 
 // Membuat folder upload jika belum ada
 if (!fs.existsSync(uploadDirectory)) {
@@ -33,10 +33,12 @@ const getAllGalleriesService = async (page, limit) => {
     try {
         // count total pages
         const rawPage = await getCountGalleryPages();
-
+        
         // converter pagination
         const {offset, totalPages} = paginateConverter(page, limit, rawPage);
-
+        if (page > totalPages) {
+            throw new Error("Page exceed data");
+        }
         const galleries = await getAllGalleries(limit, offset);
 
         return { galleries, totalPages };

@@ -23,7 +23,7 @@ const product_url = process.env.PRODUCT_URL;
 const port = process.env.APP_PORT;
 
 const ROOT_DIR = path.resolve(__dirname, '../..');
-const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads/${product_url}`);
+const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads`);
 
 // Membuat folder upload jika belum ada
 if (!fs.existsSync(uploadDirectory)) {
@@ -39,6 +39,9 @@ const getAllProductsService = async (page, limit) => {
 
         // converter pagination
         const {offset, totalPages} = paginateConverter(page, limit, rawPage);
+        if (page > totalPages) {
+            throw new Error("Page exceed data");
+        }
 
         const products = await getAllProducts(limit, offset);
 
