@@ -20,7 +20,7 @@ const gallery_url = process.env.GALLERY_URL;
 const port = process.env.APP_PORT;
 
 const ROOT_DIR = path.resolve(__dirname, '../..');
-const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads`);
+const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads/${gallery_url}`);
 
 // Membuat folder upload jika belum ada
 if (!fs.existsSync(uploadDirectory)) {
@@ -87,7 +87,7 @@ const updateGalleryService = async (payload) => {
             const urlArray = url.split('/').filter(Boolean);
             const lastIdx = urlArray.length - 1;
             const filename = urlArray[lastIdx];
-            const pathDelete = `${uploadDirectory}/${gallery_url}/${filename}`;
+            const pathDelete = `${uploadDirectory}/${filename}`;
             deleteGalleryImage(pathDelete)
             throw new Error("Gallery not found");
         }
@@ -96,7 +96,7 @@ const updateGalleryService = async (payload) => {
         const urlArray = url.split('/').filter(Boolean);
         const lastIdx = urlArray.length - 1;
         const filename = urlArray[lastIdx];
-        const pathDelete = `${uploadDirectory}/${gallery_url}/${filename}`;
+        const pathDelete = `${uploadDirectory}/${filename}`;
         const file_gallery_name = payload.gallery_image;
         const filepath = mode_app === "PROD" ? prodHost : `http://localhost:${port}/v1`;
         deleteGalleryImage(pathDelete)
@@ -123,7 +123,7 @@ const deleteGalleryService = async (galleryId) => {
         const urlArray = url.split('/').filter(Boolean);
         const lastIdx = urlArray.length - 1;
         const filename = urlArray[lastIdx];
-        const pathDelete = `${uploadDirectory}/${gallery_url}/${filename}`;
+        const pathDelete = `${uploadDirectory}/${filename}`;
         deleteGalleryImage(pathDelete);
 
         const deletedGalleryId = await deleteGallery(galleryId);
