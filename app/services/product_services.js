@@ -23,7 +23,7 @@ const product_url = process.env.PRODUCT_URL;
 const port = process.env.APP_PORT;
 
 const ROOT_DIR = path.resolve(__dirname, '../..');
-const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads`);
+const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads/${product_url}`);
 
 // Membuat folder upload jika belum ada
 if (!fs.existsSync(uploadDirectory)) {
@@ -92,7 +92,7 @@ const updateProductService = async (payload) => {
             const urlArray = url.split('/').filter(Boolean);
             const lastIdx = urlArray.length - 1;
             const filename = urlArray[lastIdx];
-            const pathDelete = `${uploadDirectory}/${product_url}/${filename}`;
+            const pathDelete = `${uploadDirectory}/${filename}`;
             deleteProductImage(pathDelete)
             if (categories === undefined) {
                 throw new Error("Category ID not found");
@@ -106,7 +106,7 @@ const updateProductService = async (payload) => {
         const urlArray = url.split('/').filter(Boolean);
         const lastIdx = urlArray.length - 1;
         const filename = urlArray[lastIdx];
-        const pathDelete = `${uploadDirectory}/${product_url}/${filename}`;
+        const pathDelete = `${uploadDirectory}/${filename}`;
         const file_product_name = payload.product_image;
         const filepath = mode_app === "PROD" ? prodHost : `http://localhost:${port}/v1`;
         deleteProductImage(pathDelete)
@@ -133,7 +133,7 @@ const deleteProductService = async (productId) => {
         const urlArray = url.split('/').filter(Boolean);
         const lastIdx = urlArray.length - 1;
         const filename = urlArray[lastIdx];
-        const pathDelete = `${uploadDirectory}/${product_url}/${filename}`;
+        const pathDelete = `${uploadDirectory}/${filename}`;
         deleteProductImage(pathDelete);
 
         const deletedProductId = await deleteProduct(productId);

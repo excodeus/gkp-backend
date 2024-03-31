@@ -59,6 +59,7 @@ routes.use(process.env.SWAGGER_URL, swaggerUi.serve, swaggerUi.setup(swaggerDocu
 const ROOT_DIR = path.resolve(__dirname, '../..');
 routes.use(`/images/${product_url}/`, express.static(`${ROOT_DIR}/storage/uploads/${product_url}`));
 routes.use(`/images/${gallery_url}/`, express.static(`${ROOT_DIR}/storage/uploads/${gallery_url}`));
+routes.use(`/images/${article_url}/`, express.static(`${ROOT_DIR}/storage/uploads/${article_url}`));
 
 // test endpoint
 routes.get('/ping', (req, res) => {

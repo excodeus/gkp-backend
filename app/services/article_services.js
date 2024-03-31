@@ -20,7 +20,7 @@ const article_url = process.env.ARTICLE_URL;
 const port = process.env.APP_PORT;
 
 const ROOT_DIR = path.resolve(__dirname, '../..');
-const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads`);
+const uploadDirectory = path.join(ROOT_DIR, `/storage/uploads/${article_url}`);
 
 // Membuat folder upload jika belum ada
 if (!fs.existsSync(uploadDirectory)) {
@@ -88,7 +88,7 @@ const updateArticleService = async (payload) => {
             const urlArray = url.split('/').filter(Boolean);
             const lastIdx = urlArray.length - 1;
             const filename = urlArray[lastIdx];
-            const pathDelete = `${uploadDirectory}/${article_url}/${filename}`;
+            const pathDelete = `${uploadDirectory}/${filename}`;
             deleteArticleImage(pathDelete)
             throw new Error("Article not found");
         }
@@ -97,7 +97,7 @@ const updateArticleService = async (payload) => {
         const urlArray = url.split('/').filter(Boolean);
         const lastIdx = urlArray.length - 1;
         const filename = urlArray[lastIdx];
-        const pathDelete = `${uploadDirectory}/${article_url}/${filename}`;
+        const pathDelete = `${uploadDirectory}/${filename}`;
         const file_article_name = payload.article_image;
         const filepath = mode_app === "PROD" ? prodHost : `http://localhost:${port}/v1`;
         deleteArticleImage(pathDelete)
@@ -124,7 +124,7 @@ const deleteArticleService = async (articleId) => {
         const urlArray = url.split('/').filter(Boolean);
         const lastIdx = urlArray.length - 1;
         const filename = urlArray[lastIdx];
-        const pathDelete = `${uploadDirectory}/${article_url}/${filename}`;
+        const pathDelete = `${uploadDirectory}/${filename}`;
         deleteArticleImage(pathDelete);
 
         const deletedArticleId = await deleteArticle(articleId);
