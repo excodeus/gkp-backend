@@ -98,7 +98,7 @@ const putProductAdmin = async (req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "Success update product", { id: productId });
     } catch (error) {
-        if (error.message === "Product not found" || error.message === "Category ID not found") {
+        if (error.message === "Product not found" || error.message === "Category ID not found" || error.message === "History not found") {
             return responseError(res, httpStatus.NOT_FOUND, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
@@ -111,7 +111,7 @@ const deleteProductAdmin = async (req, res) => {
         await deleteProductService(id);
         return responseSuccess(false, res, httpStatus.OK, "Success delete product", { id });
     } catch (error) {
-        if (error.message === "Product not found") {
+        if (error.message === "Product not found" || error.message === "History not found") {
             return responseError(res, httpStatus.NOT_FOUND, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");

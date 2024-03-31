@@ -16,7 +16,7 @@ const articleModelUpdateValidator = Joi.object({
     author: Joi.string(),
     content: Joi.string(),
     article_image: Joi.string(),
-    updated_at: Joi.number(),
+    updated_at: Joi.number().required(),
 });
 
 module.exports = {

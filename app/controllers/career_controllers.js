@@ -91,7 +91,7 @@ const putCareerAdmin = async(req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "success update career", dataId);
     } catch (error) {
-        if (error.message === "id not found") {
+        if (error.message === "id not found" || error.message === "History not found") {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
@@ -108,7 +108,7 @@ const deleteCareerAdmin = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success delete career by id", data);
     } catch (error) {
-        if (error.message === "id not found") {
+        if (error.message === "id not found" || error.message === "History not found") {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");

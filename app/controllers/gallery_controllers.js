@@ -98,7 +98,7 @@ const putGalleryAdmin = async (req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "Success update gallery", { id: galleryId });
     } catch (error) {
-        if (error.message === "Gallery not found") {
+        if (error.message === "Gallery not found" || error.message === "History not found") {
             return responseError(res, httpStatus.NOT_FOUND, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
@@ -111,7 +111,7 @@ const deleteGalleryAdmin = async (req, res) => {
         await deleteGalleryService(id);
         return responseSuccess(false, res, httpStatus.OK, "Success delete gallery", { id });
     } catch (error) {
-        if (error.message === "Gallery not found") {
+        if (error.message === "Gallery not found" || error.message === "History not found") {
             return responseError(res, httpStatus.NOT_FOUND, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");

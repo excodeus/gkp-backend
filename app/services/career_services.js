@@ -7,8 +7,21 @@ const {
     createCareer, 
     deleteCareer,
 } = require('../repositories/career_repository');
-const uuid = require('uuid');
+const { 
+    createHistory,
+    updateHistory,
+    deleteHistory
+} = require('../repositories/history_repository');
 const careerModel = require('../models/career');
+const historyModel = require('../models/history');
+const uuid = require('uuid');
+
+require('dotenv').config()
+
+const mode_app = process.env.MODE;
+const prodHost = process.env.HOST;
+const port = process.env.APP_PORT;
+const career_url = process.env.CAREER_URL;
 
 const getAllCareerAdminService = async(page, limit, status = 'all') => {
     try {
@@ -61,6 +74,25 @@ const postCareerAdminService = async(payload) => {
         // insert data
         const id = await createCareer(data);
 
+        // create history logs
+        const historyId = "HL-" + uuid.v4();
+        const filepath = mode_app === "PROD" ? prodHost : `http://localhost:${port}/v1`;
+        const route_path = `${filepath}/${career_url}/${payload.id}`
+
+        history_payload = {
+            id: historyId,
+            title: payload.name,
+            description: payload.description,
+            image_url: "",
+            route_path: route_path,
+            cpg_id: payload.id,
+            created_at: payload.created_at,
+            updated_at: payload.updated_at,
+        };
+
+        const historyData = historyModel(history_payload, true);
+        await createHistory(historyData);
+
         return {id};
     } catch (error) {
         throw error;
@@ -89,6 +121,21 @@ const putCareerByIdAdminService = async(payload, reqId) => {
         // get payload by id
         const id = await updateCareer(data);
 
+        // update history logs
+        const filepath = mode_app === "PROD" ? prodHost : `http://localhost:${port}/v1`;
+        const route_path = `${filepath}/${career_url}/${payload.id}`
+
+        history_payload = {
+            title: payload.name,
+            description: payload.description,
+            image_url: "",
+            route_path: route_path,
+            updated_at: payload.updated_at,
+        };
+
+        const historyData = historyModel(history_payload, false);
+        await updateHistory(payload.id, historyData);
+
         return id;
     } catch (error) {
         throw error;
@@ -99,6 +146,8 @@ const deleteCareerAdminService = async(id) => {
     try {
         // delete return id
         const data = await deleteCareer(id);
+        // delete history logs
+        await deleteHistory(id);
 
         return {id: data};
     } catch (error) {
