@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const {
     getAllCareerAdminService,
-    postCareerAdminService,
+    createCareerAdminService,
     getCareerByIdAdminService,
     putCareerByIdAdminService,
     deleteCareerAdminService,
@@ -53,7 +53,7 @@ const postCareerAdmin = async(req, res) => {
         const request = await careerPostValidator.validateAsync(req.body);
 
         // post data and get id
-        const dataId = await postCareerAdminService(request);
+        const dataId = await createCareerAdminService(request);
 
         return responseSuccess(false, res, httpStatus.CREATED, "success create career", dataId);
     } catch (error) {
@@ -91,7 +91,7 @@ const putCareerAdmin = async(req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "success update career", dataId);
     } catch (error) {
-        if (error.message === "id not found") {
+        if (error.message === "id not found" || error.message === "History not found") {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
@@ -108,7 +108,7 @@ const deleteCareerAdmin = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success delete career by id", data);
     } catch (error) {
-        if (error.message === "id not found") {
+        if (error.message === "id not found" || error.message === "History not found") {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");

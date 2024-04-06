@@ -9,8 +9,14 @@ const {
     updateArticle,
     deleteArticle
 } = require('../repositories/article_repository');
+const { 
+    createHistory,
+    updateHistory,
+    deleteHistory
+} = require('../repositories/history_repository');
 const paginateConverter = require('../utils/paginate_converter');
 const articleModel = require('../models/article');
+const historyModel = require('../models/history');
 
 require('dotenv').config()
 
@@ -73,6 +79,24 @@ const createArticleService = async (payload) => {
         const data = articleModel(payload, true);
         const articleId = await createArticle(data);
 
+        // create history logs
+        const historyId = "HL-" + uuid.v4();
+        const route_path = `${filepath}/${article_url}/${payload.id}`
+
+        history_payload = {
+            id: historyId,
+            title: payload.title,
+            description: payload.content,
+            image_url: payload.article_image,
+            route_path: route_path,
+            cpga_id: payload.id,
+            created_at: payload.created_at,
+            updated_at: payload.updated_at,
+        };
+
+        const historyData = historyModel(history_payload, true);
+        await createHistory(historyData);
+
         return articleId;
     } catch (error) {
         throw error;
@@ -107,6 +131,20 @@ const updateArticleService = async (payload) => {
         const data = articleModel(payload, false);
         await updateArticle(payload.id, data);
 
+        // update history logs
+        const route_path = `${filepath}/${article_url}/${payload.id}`
+
+        history_payload = {
+            title: payload.title,
+            description: payload.content,
+            image_url: payload.article_image,
+            route_path: route_path,
+            updated_at: payload.updated_at,
+        };
+
+        const historyData = historyModel(history_payload, false);
+        await updateHistory(payload.id, historyData);
+
         return payload.id;
     } catch (error) {
         throw error;
@@ -128,6 +166,9 @@ const deleteArticleService = async (articleId) => {
         deleteArticleImage(pathDelete);
 
         const deletedArticleId = await deleteArticle(articleId);
+        // delete history logs
+        await deleteHistory(articleId);
+
         return { articleId: deletedArticleId };
     } catch (error) {
         throw error;

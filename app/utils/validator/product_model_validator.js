@@ -16,7 +16,7 @@ const productModelUpdateValidator = Joi.object({
     name: Joi.string(),
     description: Joi.string(),
     product_image: Joi.string(),
-    updated_at: Joi.number(),
+    updated_at: Joi.number().required(),
 });
 
 module.exports = {
