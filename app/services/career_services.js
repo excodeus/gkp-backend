@@ -59,7 +59,7 @@ const getAllCareerAdminService = async(page, limit, status = 'all') => {
 // time variable
 const currentMillis = Date.now();
 
-const postCareerAdminService = async(payload) => {
+const createCareerAdminService = async(payload) => {
     try {
 
         // add more parameter
@@ -157,7 +157,7 @@ const deleteCareerAdminService = async(id) => {
 
 module.exports = {
     getAllCareerAdminService,
-    postCareerAdminService,
+    createCareerAdminService,
     getCareerByIdAdminService,
     putCareerByIdAdminService,
     deleteCareerAdminService,

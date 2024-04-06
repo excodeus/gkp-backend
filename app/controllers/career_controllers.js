@@ -1,7 +1,7 @@
 const httpStatus = require('http-status');
 const {
     getAllCareerAdminService,
-    postCareerAdminService,
+    createCareerAdminService,
     getCareerByIdAdminService,
     putCareerByIdAdminService,
     deleteCareerAdminService,
@@ -53,7 +53,7 @@ const postCareerAdmin = async(req, res) => {
         const request = await careerPostValidator.validateAsync(req.body);
 
         // post data and get id
-        const dataId = await postCareerAdminService(request);
+        const dataId = await createCareerAdminService(request);
 
         return responseSuccess(false, res, httpStatus.CREATED, "success create career", dataId);
     } catch (error) {

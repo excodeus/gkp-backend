@@ -12,8 +12,14 @@ const {
 const { 
     getCategoryById,
 } = require('../repositories/category_repository');
+const { 
+    createHistory,
+    updateHistory,
+    deleteHistory
+} = require('../repositories/history_repository');
 const paginateConverter = require('../utils/paginate_converter');
 const productModel = require('../models/product');
+const historyModel = require('../models/history');
 
 require('dotenv').config()
 
@@ -76,6 +82,24 @@ const createProductService = async (payload) => {
         const data = productModel(payload, true);
         const productId = await createProduct(data);
 
+        // create history logs
+        const historyId = "HL-" + uuid.v4();
+        const route_path = `${filepath}/${product_url}/${payload.id}`
+
+        history_payload = {
+            id: historyId,
+            title: payload.name,
+            description: payload.description,
+            image_url: payload.product_image,
+            route_path: route_path,
+            cpg_id: payload.id,
+            created_at: payload.created_at,
+            updated_at: payload.updated_at,
+        };
+
+        const historyData = historyModel(history_payload, true);
+        await createHistory(historyData);
+
         return productId;
     } catch (error) {
         throw error;
@@ -116,6 +140,20 @@ const updateProductService = async (payload) => {
         const data = productModel(payload, false);
         await updateProduct(payload.id, data);
 
+         // update history logs
+        const route_path = `${filepath}/${product_url}/${payload.id}`
+
+        history_payload = {
+            title: payload.name,
+            description: payload.description,
+            image_url: payload.product_image,
+            route_path: route_path,
+            updated_at: payload.updated_at,
+        };
+
+        const historyData = historyModel(history_payload, false);
+        await updateHistory(payload.id, historyData);
+
         return payload.id;
     } catch (error) {
         throw error;
@@ -137,6 +175,9 @@ const deleteProductService = async (productId) => {
         deleteProductImage(pathDelete);
 
         const deletedProductId = await deleteProduct(productId);
+         // delete history logs
+        await deleteHistory(productId);
+
         return { productId: deletedProductId };
     } catch (error) {
         throw error;
