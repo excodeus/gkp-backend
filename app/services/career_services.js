@@ -85,7 +85,7 @@ const createCareerAdminService = async(payload) => {
             description: payload.description,
             image_url: "",
             route_path: route_path,
-            cpg_id: payload.id,
+            cpga_id: payload.id,
             created_at: payload.created_at,
             updated_at: payload.updated_at,
         };

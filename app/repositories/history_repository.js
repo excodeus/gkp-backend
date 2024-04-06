@@ -9,19 +9,19 @@ const createHistory = async (historyData) => {
             description,
             image_url,
             route_path,
-            cpg_id,
+            cpga_id,
             created_at,
             updated_at
         } = historyData.value;
         await connection.query(
-            "INSERT INTO history_logs (id, title, description, image_url, route_path, cpg_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO history_logs (id, title, description, image_url, route_path, cpga_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
             [
                 id,
                 title,
                 description,
                 image_url,
                 route_path,
-                cpg_id,
+                cpga_id,
                 created_at,
                 updated_at
             ]
@@ -34,7 +34,7 @@ const createHistory = async (historyData) => {
     }
 };
 
-const updateHistory = async (cpgId, historyData) => {
+const updateHistory = async (cpgaId, historyData) => {
     try {
         const connection = await mySQLConnection();
         const {
@@ -74,8 +74,8 @@ const updateHistory = async (cpgId, historyData) => {
         const setString = sets.join(', ');
 
         // Execute the query with dynamic SET part
-        const query = `UPDATE history_logs SET ${setString} WHERE cpg_id = ?`;
-        values.push(cpgId);
+        const query = `UPDATE history_logs SET ${setString} WHERE cpga_id = ?`;
+        values.push(cpgaId);
         const result = await connection.query(query, values);
 
         connection.end();
@@ -84,24 +84,24 @@ const updateHistory = async (cpgId, historyData) => {
             throw new Error("History not found");
         }
 
-        return cpgId;
+        return cpgaId;
     } catch (error) {
         throw error;
     }
 };
 
 
-const deleteHistory = async (cpgId) => {
+const deleteHistory = async (cpgaId) => {
     try {
         const connection = await mySQLConnection();
-        const result = await connection.query('DELETE FROM history_logs WHERE cpg_id = ?', [cpgId]);
+        const result = await connection.query('DELETE FROM history_logs WHERE cpga_id = ?', [cpgaId]);
         connection.end();
 
         if (result.affectedRows === 0) {
             throw new Error("History not found");
         }
 
-        return cpgId;
+        return cpgaId;
     } catch (error) {
         throw error;
     }

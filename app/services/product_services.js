@@ -92,7 +92,7 @@ const createProductService = async (payload) => {
             description: payload.description,
             image_url: payload.product_image,
             route_path: route_path,
-            cpg_id: payload.id,
+            cpga_id: payload.id,
             created_at: payload.created_at,
             updated_at: payload.updated_at,
         };
@@ -140,7 +140,7 @@ const updateProductService = async (payload) => {
         const data = productModel(payload, false);
         await updateProduct(payload.id, data);
 
-         // update history logs
+        // update history logs
         const route_path = `${filepath}/${product_url}/${payload.id}`
 
         history_payload = {
@@ -175,7 +175,7 @@ const deleteProductService = async (productId) => {
         deleteProductImage(pathDelete);
 
         const deletedProductId = await deleteProduct(productId);
-         // delete history logs
+        // delete history logs
         await deleteHistory(productId);
 
         return { productId: deletedProductId };
