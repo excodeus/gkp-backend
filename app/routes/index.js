@@ -9,6 +9,7 @@ const categoryAdminFuncRouter = require('./category_routes');
 const productAdminFuncRouter = require('./product_routes');
 const galleryAdminFuncRouter = require('./gallery_routes');
 const articleAdminFuncRouter = require('./article_routes');
+const userAdminFuncRouter = require('./user_routes');
 
 // run dotenv
 require('dotenv').config()
@@ -23,6 +24,10 @@ const category_url = process.env.CATEGORY_URL;
 const product_url = process.env.PRODUCT_URL;
 const gallery_url = process.env.GALLERY_URL;
 const article_url = process.env.ARTICLE_URL;
+
+// user routes list grouping
+const userAdminRoutes = userAdminFuncRouter();
+routes.use(`/${administrator_url}/users`, userAdminRoutes);
 
 // career routes list grouping
 const careerAdminRoutes = careerAdminFuncRouter();

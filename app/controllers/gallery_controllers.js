@@ -7,6 +7,7 @@ const {
     deleteGalleryService
 } = require('../services/gallery_services');
 const { responseSuccess, responseError } = require('../utils/responses');
+const {galleryPostValidator, galleryUpdateValidator} = require('../utils/validator/gallery_validator');
 
 const getAllGalleriesAdmin = async (req, res) => {
     try {
@@ -68,10 +69,14 @@ const postGalleryAdmin = async (req, res) => {
         }
 
         const payload = { ...body, gallery_image: file.filename };
-        const galleryId = await createGalleryService(payload);
+        const validatedPayload = await galleryPostValidator.validateAsync(payload);
+        const galleryId = await createGalleryService(validatedPayload);
 
         return responseSuccess(false, res, httpStatus.CREATED, "Success create gallery", { galleryId });
     } catch (error) {
+        if (error.message.includes('ER_DUP_ENTRY')) {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
@@ -94,12 +99,16 @@ const putGalleryAdmin = async (req, res) => {
 
         body.id = id;
         const payload = { ...body, gallery_image: file.filename };
-        const galleryId = await updateGalleryService(payload);
+        const validatedPayload = await galleryUpdateValidator.validateAsync(payload);
+        const galleryId = await updateGalleryService(validatedPayload);
 
         return responseSuccess(false, res, httpStatus.OK, "Success update gallery", { id: galleryId });
     } catch (error) {
         if (error.message === "Gallery not found" || error.message === "History not found") {
             return responseError(res, httpStatus.NOT_FOUND, error.message);
+        }
+        if (error.message.includes('ER_DUP_ENTRY')) {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }

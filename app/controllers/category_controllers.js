@@ -30,7 +30,7 @@ const postCategoryAdmin = async(req, res) => {
         return responseSuccess(false, res, httpStatus.CREATED, "success create category", dataId);
     } catch (error) {
         // duplicate name
-        if (error.code === "ER_DUP_ENTRY") {
+        if (error.message.includes('ER_DUP_ENTRY')) {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
@@ -50,7 +50,10 @@ const putCategoryAdmin = async(req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "success update category", {id: dataId});
     } catch (error) {
-        if (error.message === "id not found" || error.code === "ER_DUP_ENTRY") {
+        if (error.message === "id not found") {
+            return responseError(res, httpStatus.NOT_FOUND, error.message);
+        }
+        if (error.message.includes('ER_DUP_ENTRY')) {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
