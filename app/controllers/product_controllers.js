@@ -7,6 +7,7 @@ const {
     deleteProductService
 } = require('../services/product_services');
 const { responseSuccess, responseError } = require('../utils/responses');
+const {productPostValidator, productUpdateValidator} = require('../utils/validator/product_validator');
 
 const getAllProductsAdmin = async (req, res) => {
     try {
@@ -68,10 +69,14 @@ const postProductAdmin = async (req, res) => {
         }
 
         const payload = { ...body, product_image: file.filename };
-        const productId = await createProductService(payload);
+        const validatedPayload = await productPostValidator.validateAsync(payload);
+        const productId = await createProductService(validatedPayload);
 
         return responseSuccess(false, res, httpStatus.CREATED, "Success create product", { productId });
     } catch (error) {
+        if (error.message.includes('ER_DUP_ENTRY')) {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
@@ -94,12 +99,16 @@ const putProductAdmin = async (req, res) => {
 
         body.id = id;
         const payload = { ...body, product_image: file.filename };
-        const productId = await updateProductService(payload);
+        const validatedPayload = await productUpdateValidator.validateAsync(payload);
+        const productId = await updateProductService(validatedPayload);
 
         return responseSuccess(false, res, httpStatus.OK, "Success update product", { id: productId });
     } catch (error) {
         if (error.message === "Product not found" || error.message === "Category ID not found" || error.message === "History not found") {
             return responseError(res, httpStatus.NOT_FOUND, error.message);
+        }
+        if (error.message.includes('ER_DUP_ENTRY')) {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }

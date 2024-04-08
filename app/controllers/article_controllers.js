@@ -7,6 +7,7 @@ const {
     deleteArticleService
 } = require('../services/article_services');
 const { responseSuccess, responseError } = require('../utils/responses');
+const {articlePostValidator, articleUpdateValidator} = require('../utils/validator/article_validator');
 
 const getAllArticlesAdmin = async (req, res) => {
     try {
@@ -54,6 +55,7 @@ const getArticleByIdAdmin = async (req, res) => {
 
 const postArticleAdmin = async (req, res) => {
     try {
+
         const { body, file, fileValidationError } = req;
 
         if (fileValidationError) {
@@ -68,10 +70,14 @@ const postArticleAdmin = async (req, res) => {
         }
 
         const payload = { ...body, article_image: file.filename };
-        const articleId = await createArticleService(payload);
+        const validatedPayload = await articlePostValidator.validateAsync(payload);
+        const articleId = await createArticleService(validatedPayload);
 
         return responseSuccess(false, res, httpStatus.CREATED, "Success create article", { articleId });
     } catch (error) {
+        if (error.message.includes('ER_DUP_ENTRY')) {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
@@ -94,12 +100,16 @@ const putArticleAdmin = async (req, res) => {
 
         body.id = id;
         const payload = { ...body, article_image: file.filename };
-        const articleId = await updateArticleService(payload);
+        const validatedPayload = await articleUpdateValidator.validateAsync(payload);
+        const articleId = await updateArticleService(validatedPayload);
 
         return responseSuccess(false, res, httpStatus.OK, "Success update article", { id: articleId });
     } catch (error) {
         if (error.message === "Article not found") {
             return responseError(res, httpStatus.NOT_FOUND, error.message);
+        }
+        if (error.message.includes('ER_DUP_ENTRY')) {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
