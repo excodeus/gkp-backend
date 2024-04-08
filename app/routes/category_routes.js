@@ -5,15 +5,18 @@ const {
     putCategoryAdmin,
     deleteCategoryAdmin,
 } = require('../controllers/category_controllers');
+const {
+    authenticateToken,
+} = require('../middlewares/authentication');
 
 const careerAdminFuncRouter = () => {
     const careerRoutes = express.Router();
 
     // career administrator endpoint
-    careerRoutes.get("/", getAllCategoryAdmin);
-    careerRoutes.post("/", postCategoryAdmin);
-    careerRoutes.put("/:id", putCategoryAdmin);
-    careerRoutes.delete("/:id", deleteCategoryAdmin);
+    careerRoutes.get("/", authenticateToken, getAllCategoryAdmin);
+    careerRoutes.post("/", authenticateToken, postCategoryAdmin);
+    careerRoutes.put("/:id", authenticateToken, putCategoryAdmin);
+    careerRoutes.delete("/:id", authenticateToken, deleteCategoryAdmin);
 
     return careerRoutes;
 };
