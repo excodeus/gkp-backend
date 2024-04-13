@@ -9,7 +9,6 @@ require('dotenv').config()
 
 const startApp = async () => {
     try {
-        const ROOT_DIR = __dirname;
         // express app
         const app = express();
 
