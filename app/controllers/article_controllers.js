@@ -4,7 +4,8 @@ const {
     getArticleByIdService,
     createArticleService,
     updateArticleService,
-    deleteArticleService
+    deleteArticleService,
+    getAllArticlesClientService,
 } = require('../services/article_services');
 const { responseSuccess, responseError } = require('../utils/responses');
 const {articlePostValidator, articleUpdateValidator} = require('../utils/validator/article_validator');
@@ -128,10 +129,23 @@ const deleteArticleAdmin = async (req, res) => {
     }
 };
 
+const getAllArticles = async (req, res) => {
+    try {
+        const {articles} = await getAllArticlesClientService();
+        return responseSuccess(true, res, httpStatus.OK, "Success get all articles", articles);
+    } catch (error) {
+        if (error.message === "Page exceed data") {
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+    }
+};
+
 module.exports = {
     getAllArticlesAdmin,
     getArticleByIdAdmin,
     postArticleAdmin,
     putArticleAdmin,
-    deleteArticleAdmin
+    deleteArticleAdmin,
+    getAllArticles,
 };
