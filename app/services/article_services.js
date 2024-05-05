@@ -7,7 +7,8 @@ const {
     getArticleById,
     createArticle,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    getAllArticlesClient,
 } = require('../repositories/article_repository');
 const { 
     createHistory,
@@ -182,10 +183,21 @@ const deleteArticleImage = async (imagePath) => {
     }
 };
 
+const getAllArticlesClientService = async () => {
+    try {
+        const articles = await getAllArticlesClient();
+
+        return { articles };
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getAllArticlesService,
     getArticleByIdService,
     createArticleService,
     updateArticleService,
-    deleteArticleService
+    deleteArticleService,
+    getAllArticlesClientService,
 };

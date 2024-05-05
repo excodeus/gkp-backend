@@ -7,7 +7,7 @@ const {
 const careerClientFuncRouter = () => {
     const careerRoutes = express.Router();
 
-    // career administrator endpoint
+    // career endpoint
     careerRoutes.get("/", getAllCareerClient);
     careerRoutes.get("/:id", getDetailCareer);
 

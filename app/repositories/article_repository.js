@@ -141,11 +141,24 @@ const deleteArticle = async (articleId) => {
     }
 };
 
+const getAllArticlesClient = async () => {
+    try {
+        const connection = await mySQLConnection();
+        const allArticlesData = await connection.query('SELECT id, title, content, article_image FROM articles ORDER BY updated_at ASC LIMIT 3');
+        connection.end();
+
+        return allArticlesData;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getCountArticlePages,
     getAllArticles,
     getArticleById,
     createArticle,
     updateArticle,
-    deleteArticle
+    deleteArticle,
+    getAllArticlesClient,
 };
