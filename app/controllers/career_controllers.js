@@ -2,9 +2,10 @@ const httpStatus = require('http-status');
 const {
     getAllCareerAdminService,
     createCareerAdminService,
-    getCareerByIdAdminService,
+    getCareerByIdService,
     putCareerByIdAdminService,
     deleteCareerAdminService,
+    getAllCareerClientService,
 } = require('../services/career_services');
 const {responseSuccess, responseError} = require('../utils/responses');
 const {careerPostValidator, careerUpdateValidator} = require('../utils/validator/career_validator');
@@ -64,18 +65,18 @@ const postCareerAdmin = async(req, res) => {
     }
 };
 
-const getDetailCareerAdmin = async(req, res) => {
+const getDetailCareer = async(req, res) => {
     try {
         // get params
         const { id } = req.params;
 
         // get data by id
-        const data = await getCareerByIdAdminService(id);
+        const data = await getCareerByIdService(id);
 
         return responseSuccess(true, res, httpStatus.OK, "success get career by id", data);
     } catch (error) {
         if (error.message === "id not found") {
-            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+            return responseError(res, httpStatus.NOT_FOUND, error.message);
         }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
@@ -121,10 +122,23 @@ const deleteCareerAdmin = async(req, res) => {
     }
 };
 
+const getAllCareerClient = async(req, res) => {
+    try {
+        // get data
+        const {data} = await getAllCareerClientService();
+
+        return responseSuccess(true, res, httpStatus.OK, "success get all careers", data);
+    } catch (error) {
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
+    }
+};
+
+
 module.exports = {
     getAllCareerAdmin,
     postCareerAdmin,
-    getDetailCareerAdmin,
+    getDetailCareer,
     putCareerAdmin,
     deleteCareerAdmin,
+    getAllCareerClient,
 };

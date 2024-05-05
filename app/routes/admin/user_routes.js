@@ -6,12 +6,12 @@ const {
     logoutUser,
     updateUserAdmin,
     deleteUserAdmin,
-} = require('../controllers/user_controllers');
+} = require('../../controllers/user_controllers');
 const {
     authenticateToken,
     authenticateRefreshToken,
     basicToken,
-} = require('../middlewares/authentication');
+} = require('../../middlewares/authentication');
 
 const userAdminFuncRouter = () => {
     const userRoutes = express.Router();

@@ -6,6 +6,7 @@ const {
     updateCareer, 
     createCareer, 
     deleteCareer,
+    getAllCareerClient,
 } = require('../repositories/career_repository');
 const { 
     createHistory,
@@ -43,6 +44,7 @@ const getAllCareerAdminService = async(page, limit, status = 'all') => {
         // valid status to boolean
         const validStatus = configStatus[status];
 
+        let data;
         // get data
         if (status === 'all') {
             data = await getAllCareer(limit, offset);
@@ -99,7 +101,7 @@ const createCareerAdminService = async(payload) => {
     }
 };
 
-const getCareerByIdAdminService = async(id) => {
+const getCareerByIdService = async(id) => {
     try {
         // get data by id
         const data = await getCareerById(id);
@@ -155,10 +157,23 @@ const deleteCareerAdminService = async(id) => {
     }
 };
 
+const getAllCareerClientService = async() => {
+    try {
+        // get data
+        const data = await getAllCareerClient();
+
+        return {data};
+    } catch (error) {
+        throw error;
+    }
+};
+
+
 module.exports = {
     getAllCareerAdminService,
     createCareerAdminService,
-    getCareerByIdAdminService,
+    getCareerByIdService,
     putCareerByIdAdminService,
     deleteCareerAdminService,
+    getAllCareerClientService,
 };

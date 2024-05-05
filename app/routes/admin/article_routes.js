@@ -5,11 +5,11 @@ const {
     postArticleAdmin,
     putArticleAdmin,
     deleteArticleAdmin
-} = require('../controllers/article_controllers');
+} = require('../../controllers/article_controllers');
 const {
     authenticateToken,
-} = require('../middlewares/authentication');
-const upload = require('../middlewares/image_filter_middleware');
+} = require('../../middlewares/authentication');
+const upload = require('../../middlewares/image_filter_middleware');
 
 const articleAdminFuncRouter = () => {
     const articleRoutes = express.Router();

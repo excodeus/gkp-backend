@@ -4,12 +4,13 @@ const path = require('path');
 const swaggerUi = require('swagger-ui-express');
 const fs = require('fs');
 const yaml = require('js-yaml');
-const careerAdminFuncRouter = require('./career_routes');
-const categoryAdminFuncRouter = require('./category_routes');
-const productAdminFuncRouter = require('./product_routes');
-const galleryAdminFuncRouter = require('./gallery_routes');
-const articleAdminFuncRouter = require('./article_routes');
-const userAdminFuncRouter = require('./user_routes');
+const careerAdminFuncRouter = require('./admin/career_routes');
+const careerClientFuncRouter = require('./client/career_routes');
+const categoryAdminFuncRouter = require('./admin/category_routes');
+const productAdminFuncRouter = require('./admin/product_routes');
+const galleryAdminFuncRouter = require('./admin/gallery_routes');
+const articleAdminFuncRouter = require('./admin/article_routes');
+const userAdminFuncRouter = require('./admin/user_routes');
 
 // run dotenv
 require('dotenv').config()
@@ -26,27 +27,21 @@ const gallery_url = process.env.GALLERY_URL;
 const article_url = process.env.ARTICLE_URL;
 const user_url = process.env.USER_URL;
 
-// user routes list grouping
+// client routes list grouping
+const careerRoutes = careerClientFuncRouter();
+routes.use(`/${career_url}`, careerRoutes);
+
+// admin routes list grouping
 const userAdminRoutes = userAdminFuncRouter();
 routes.use(`/${administrator_url}/${user_url}`, userAdminRoutes);
-
-// career routes list grouping
 const careerAdminRoutes = careerAdminFuncRouter();
 routes.use(`/${administrator_url}/${career_url}`, careerAdminRoutes);
-
-// category routes list grouping
 const categoryAdminRoutes = categoryAdminFuncRouter();
 routes.use(`/${administrator_url}/${category_url}`, categoryAdminRoutes);
-
-// product routes list grouping
 const productAdminRoutes = productAdminFuncRouter();
 routes.use(`/${administrator_url}/${product_url}`, productAdminRoutes);
-
-// gallery routes list grouping
 const galleryAdminRoutes = galleryAdminFuncRouter();
 routes.use(`/${administrator_url}/${gallery_url}`, galleryAdminRoutes);
-
-// article routes list grouping
 const articleAdminRoutes = articleAdminFuncRouter();
 routes.use(`/${administrator_url}/${article_url}`, articleAdminRoutes);
 

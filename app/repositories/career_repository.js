@@ -162,6 +162,49 @@ const deleteCareer = async(id) => {
     }
 };
 
+const getAllCareerClient = async () => {
+    try {
+        const connection = await mySQLConnection();
+        // let allCareerData;
+        const allCareerData = await connection.query('SELECT id, name, position FROM careers WHERE status = 1 ORDER BY updated_at ASC LIMIT 25');
+        const careers = allCareerData.map(career => ({
+            id: career.id,
+            name: career.name,
+            position: career.position,
+        }));
+        connection.end();
+
+        return careers;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getCareerByIdClient = async (id) => {
+    try {
+        const connection = await mySQLConnection();
+        const [careerData] = await connection.query('SELECT id, name, position, status, description, updated_at FROM careers WHERE id = ? ORDER BY updated_at ASC LIMIT 1', [id]);
+        connection.end();
+
+        if (careerData === undefined) {
+            throw new Error("id not found");
+        }
+        // Convert status to boolean
+        const career = {
+            id: careerData.id,
+            name: careerData.name,
+            position: careerData.position,
+            status: career.status === 1 ? true : false,
+            description: careerData.description,
+            updated_at: careerData.updated_at
+        };
+
+        return career;
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getCountCareerPages,
     getAllCareer, 
@@ -169,4 +212,6 @@ module.exports = {
     updateCareer, 
     createCareer, 
     deleteCareer,
+    getAllCareerClient,
+    getCareerByIdClient,
 };

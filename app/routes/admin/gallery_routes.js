@@ -5,11 +5,11 @@ const {
     postGalleryAdmin,
     putGalleryAdmin,
     deleteGalleryAdmin
-} = require('../controllers/gallery_controllers');
+} = require('../../controllers/gallery_controllers');
 const {
     authenticateToken,
-} = require('../middlewares/authentication');
-const upload = require('../middlewares/image_filter_middleware');
+} = require('../../middlewares/authentication');
+const upload = require('../../middlewares/image_filter_middleware');
 
 const galleryAdminFuncRouter = () => {
     const galleryRoutes = express.Router();
