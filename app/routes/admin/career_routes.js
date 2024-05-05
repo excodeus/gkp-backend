@@ -2,13 +2,13 @@ const express = require('express');
 const {
     getAllCareerAdmin,
     postCareerAdmin,
-    getDetailCareerAdmin,
+    getDetailCareer,
     putCareerAdmin,
     deleteCareerAdmin,
-} = require('../controllers/career_controllers');
+} = require('../../controllers/career_controllers');
 const {
     authenticateToken,
-} = require('../middlewares/authentication');
+} = require('../../middlewares/authentication');
 
 const careerAdminFuncRouter = () => {
     const careerRoutes = express.Router();
@@ -16,7 +16,7 @@ const careerAdminFuncRouter = () => {
     // career administrator endpoint
     careerRoutes.get("/", authenticateToken, getAllCareerAdmin);
     careerRoutes.post("/", authenticateToken, postCareerAdmin);
-    careerRoutes.get("/:id", authenticateToken, getDetailCareerAdmin);
+    careerRoutes.get("/:id", authenticateToken, getDetailCareer);
     careerRoutes.put("/:id", authenticateToken, putCareerAdmin);
     careerRoutes.delete("/:id", authenticateToken, deleteCareerAdmin);
 

@@ -2,7 +2,7 @@
 node_modules
 migrations
 /storage/**
-app/routes/reset_password_routes.js
+app/routes/admin/reset_password_routes.js
 app/utils/crypto_hash.js
 app/utils/email_transporter.js
 app/utils/validator/reset_password_validator.js

@@ -5,11 +5,11 @@ const {
     getProductByIdAdmin,
     putProductAdmin,
     deleteProductAdmin,
-} = require('../controllers/product_controllers');
+} = require('../../controllers/product_controllers');
 const {
     authenticateToken,
-} = require('../middlewares/authentication');
-const upload = require('../middlewares/image_filter_middleware');
+} = require('../../middlewares/authentication');
+const upload = require('../../middlewares/image_filter_middleware');
 
 const productAdminFuncRouter = () => {
     const productRoutes = express.Router();

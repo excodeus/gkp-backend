@@ -4,10 +4,10 @@ const {
     postCategoryAdmin,
     putCategoryAdmin,
     deleteCategoryAdmin,
-} = require('../controllers/category_controllers');
+} = require('../../controllers/category_controllers');
 const {
     authenticateToken,
-} = require('../middlewares/authentication');
+} = require('../../middlewares/authentication');
 
 const careerAdminFuncRouter = () => {
     const careerRoutes = express.Router();
