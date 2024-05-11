@@ -1,5 +1,5 @@
 // response success json
-const responseSuccess = (isGetAll, response, statusCode, message = '', data = [], page, limit, totalPage) => {
+const responseSuccess = (isGetAll, response, statusCode, message = '', data = [], page, limit, totalPage, totalData) => {
     const responseData = {
         error: false,
         message: message,
@@ -7,6 +7,7 @@ const responseSuccess = (isGetAll, response, statusCode, message = '', data = []
     };
     if (isGetAll) {
         responseData['totalPage'] = totalPage;
+        responseData['totalData'] = totalData;
         responseData['currentPage'] = page;
         responseData['limitPage'] = limit;
     }

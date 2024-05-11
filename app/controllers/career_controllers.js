@@ -37,13 +37,10 @@ const getAllCareerAdmin = async(req, res) => {
         +pageInt; +limitInt;
 
         // get data and total page
-        const {data, totalPages} = await getAllCareerAdminService(pageInt, limitInt, status);
+        const {data, totalPages, totalData} = await getAllCareerAdminService(pageInt, limitInt, status);
 
-        return responseSuccess(true, res, httpStatus.OK, "success get all careers", data, pageInt, limitInt, totalPages);
+        return responseSuccess(true, res, httpStatus.OK, "success get all careers", data, pageInt, limitInt, totalPages, totalData);
     } catch (error) {
-        if (error.message === "Page exceed data") {
-            return responseError(res, httpStatus.BAD_REQUEST, error.message);
-        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };

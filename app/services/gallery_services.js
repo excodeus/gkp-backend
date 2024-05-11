@@ -39,16 +39,14 @@ const currentMillis = Date.now();
 const getAllGalleriesService = async (page, limit) => {
     try {
         // count total pages
-        const rawPage = await getCountGalleryPages();
+        const totalData = await getCountGalleryPages();
         
         // converter pagination
-        const {offset, totalPages} = paginateConverter(page, limit, rawPage);
-        if (page > totalPages) {
-            throw new Error("Page exceed data");
-        }
+        const {offset, totalPages} = paginateConverter(page, limit, totalData);
+
         const galleries = await getAllGalleries(limit, offset);
 
-        return { galleries, totalPages };
+        return { galleries, totalPages, totalData };
     } catch (error) {
         throw error;
     }

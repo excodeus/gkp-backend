@@ -27,13 +27,10 @@ const career_url = process.env.CAREER_URL;
 const getAllCareerAdminService = async(page, limit, status = 'all') => {
     try {
         // count total pages
-        const rawPage = await getCountCareerPages();
+        const totalData = await getCountCareerPages();
 
         // converter pagination
-        const {offset, totalPages} = paginateConverter(page, limit, rawPage);
-        if (page > totalPages) {
-            throw new Error("Page exceed data");
-        }
+        const {offset, totalPages} = paginateConverter(page, limit, totalData);
 
         // status conf
         const configStatus = {
@@ -52,7 +49,7 @@ const getAllCareerAdminService = async(page, limit, status = 'all') => {
             data = await getAllCareer(limit, offset, validStatus);
         }
 
-        return {data, totalPages};
+        return {data, totalPages, totalData};
     } catch (error) {
         throw error;
     }

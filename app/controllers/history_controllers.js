@@ -11,7 +11,6 @@ const getAllHistory = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success get all history", histories);
     } catch (error) {
-        throw error
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };
