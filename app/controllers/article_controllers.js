@@ -10,13 +10,15 @@ const {
 const { responseSuccess, responseError } = require('../utils/responses');
 const {articlePostValidator, articleUpdateValidator} = require('../utils/validator/article_validator');
 
-const getAllArticlesAdmin = async (req, res) => {
+const getAllArticles = async (req, res) => {
     try {
-        const {page, limit} = req.query;
+        let {page, limit} = req.query;
         
         // validate required query
         if (page === undefined && limit === undefined) {
-            return responseError(res, httpStatus.BAD_REQUEST, "page or limit not should mention");
+            // default value
+            page = 1;
+            limit = 10;
         }
 
         // convert page and limit to int
@@ -25,7 +27,9 @@ const getAllArticlesAdmin = async (req, res) => {
 
         // validate limit page status
         if (isNaN(pageInt) || isNaN(limitInt)) {
-            return responseError(res, httpStatus.BAD_REQUEST, "page or limit not a number");
+            // default value
+            pageInt = 1;
+            limitInt = 10;
         }
         
         // should positive number
@@ -34,12 +38,11 @@ const getAllArticlesAdmin = async (req, res) => {
         const {articles, totalPages, totalData} = await getAllArticlesService(pageInt, limitInt);
         return responseSuccess(true, res, httpStatus.OK, "Success get all articles", articles, pageInt, limitInt, totalPages, totalData);
     } catch (error) {
-        throw error
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
 
-const getArticleByIdAdmin = async (req, res) => {
+const getArticleById = async (req, res) => {
     try {
         const { id } = req.params;
         const article = await getArticleByIdService(id);
@@ -127,7 +130,7 @@ const deleteArticleAdmin = async (req, res) => {
     }
 };
 
-const getAllArticles = async (req, res) => {
+const getAllArticlesLandingPage = async (req, res) => {
     try {
         const {articles} = await getAllArticlesClientService();
         return responseSuccess(true, res, httpStatus.OK, "Success get all articles", articles);
@@ -140,10 +143,10 @@ const getAllArticles = async (req, res) => {
 };
 
 module.exports = {
-    getAllArticlesAdmin,
-    getArticleByIdAdmin,
+    getAllArticles,
+    getArticleById,
     postArticleAdmin,
     putArticleAdmin,
     deleteArticleAdmin,
-    getAllArticles,
+    getAllArticlesLandingPage,
 };

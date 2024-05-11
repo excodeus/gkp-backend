@@ -11,11 +11,13 @@ const {productPostValidator, productUpdateValidator} = require('../utils/validat
 
 const getAllProductsAdmin = async (req, res) => {
     try {
-        const {page, limit} = req.query;
+        let {page, limit} = req.query;
         
         // validate required query
         if (page === undefined && limit === undefined) {
-            return responseError(res, httpStatus.BAD_REQUEST, "page or limit not should mention");
+            // default value
+            page = 1;
+            limit = 10;
         }
 
         // convert page and limit to int
@@ -24,7 +26,9 @@ const getAllProductsAdmin = async (req, res) => {
 
         // validate limit page status
         if (isNaN(pageInt) || isNaN(limitInt)) {
-            return responseError(res, httpStatus.BAD_REQUEST, "page or limit not a number");
+            // default value
+            pageInt = 1;
+            limitInt = 10;
         }
         
         // should positive number

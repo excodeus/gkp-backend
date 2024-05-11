@@ -1,12 +1,17 @@
 const mySQLConnection = require('../providers/mysql/index');
 
-const getCountCareerPages = async() => {
+const getCountCareerPages = async(status) => {
     try {
         const connection = await mySQLConnection();
-        const [rows] = await connection.query('SELECT count(*) as count from careers');
+        let row;
+        if (status === undefined) {
+            [row] = await connection.query('SELECT count(*) as count from careers');
+        } else {
+            [row] = await connection.query('SELECT count(*) as count from careers WHERE status = ?', [status]);
+        }
         connection.end();
         
-        return rows.count;
+        return row.count;
     } catch (error) {
         throw error;
     }

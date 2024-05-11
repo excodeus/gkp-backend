@@ -1,7 +1,7 @@
 const express = require('express');
 const {
-    getAllArticlesAdmin,
-    getArticleByIdAdmin,
+    getAllArticles,
+    getArticleById,
     postArticleAdmin,
     putArticleAdmin,
     deleteArticleAdmin
@@ -15,9 +15,9 @@ const articleAdminFuncRouter = () => {
     const articleRoutes = express.Router();
 
     // article administrator endpoint
-    articleRoutes.get("/", authenticateToken, getAllArticlesAdmin);
+    articleRoutes.get("/", authenticateToken, getAllArticles);
     articleRoutes.post("/", authenticateToken, upload.single('article_image'), postArticleAdmin);
-    articleRoutes.get("/:id", authenticateToken, getArticleByIdAdmin);
+    articleRoutes.get("/:id", authenticateToken, getArticleById);
     articleRoutes.put("/:id", authenticateToken, upload.single('article_image'), putArticleAdmin);
     articleRoutes.delete("/:id", authenticateToken, deleteArticleAdmin);
 

@@ -24,14 +24,8 @@ const prodHost = process.env.HOST;
 const port = process.env.APP_PORT;
 const career_url = process.env.CAREER_URL;
 
-const getAllCareerAdminService = async(page, limit, status = 'all') => {
+const getAllCareerAdminService = async(page, limit, status) => {
     try {
-        // count total pages
-        const totalData = await getCountCareerPages();
-
-        // converter pagination
-        const {offset, totalPages} = paginateConverter(page, limit, totalData);
-
         // status conf
         const configStatus = {
             "closed": 0,
@@ -41,9 +35,20 @@ const getAllCareerAdminService = async(page, limit, status = 'all') => {
         // valid status to boolean
         const validStatus = configStatus[status];
 
+        let totalData;
+        // count total pages
+        if (status === undefined) {
+            totalData = await getCountCareerPages();
+        } else {
+            totalData = await getCountCareerPages(validStatus);
+        }
+
+        // converter pagination
+        const {offset, totalPages} = paginateConverter(page, limit, totalData);
+
         let data;
         // get data
-        if (status === 'all') {
+        if (status === undefined) {
             data = await getAllCareer(limit, offset);
         } else {
             data = await getAllCareer(limit, offset, validStatus);
