@@ -3,7 +3,7 @@ const mySQLConnection = require('../providers/mysql/index');
 const getAllCategory = async () => {
     try {
         const connection = await mySQLConnection();
-        const allCategoryData = await connection.query('SELECT id, name, updated_at FROM categories ORDER BY updated_at');
+        const allCategoryData = await connection.query('SELECT id, name, updated_at FROM categories ORDER BY updated_at, name');
         connection.end();
 
         return allCategoryData;

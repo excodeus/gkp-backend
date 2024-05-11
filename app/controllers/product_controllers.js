@@ -133,8 +133,8 @@ const deleteProductAdmin = async (req, res) => {
 const getAllProductsByCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await getAllProductByCategoryService(id);
-        return responseSuccess(true, res, httpStatus.OK, "Success get all products by category", product);
+        const products = await getAllProductByCategoryService(id);
+        return responseSuccess(true, res, httpStatus.OK, "Success get all products by category", products);
     } catch (error) {
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }

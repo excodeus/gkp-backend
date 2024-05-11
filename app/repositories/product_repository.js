@@ -141,10 +141,15 @@ const deleteProduct = async (productId) => {
     }
 };
 
-const getAllProductByCategory = async (categoryId) => {
+const getAllProductByCategory = async (categoryId, isCategoryQuery = false) => {
     try {
         const connection = await mySQLConnection();
-        const allProductsData = await connection.query('SELECT p.id, p.name, p.product_image FROM products p INNER JOIN categories c ON c.id = p.category_id WHERE c.id = ? ORDER BY p.name ASC', [categoryId]);
+        let allProductsData;
+        if (isCategoryQuery) {
+            allProductsData = await connection.query('SELECT p.id, p.name, p.product_image FROM products p INNER JOIN categories c ON c.id = p.category_id WHERE c.id = ? ORDER BY p.name ASC LIMIT 8', [categoryId]);
+        } else {
+            allProductsData = await connection.query('SELECT p.id, p.name, p.product_image FROM products p INNER JOIN categories c ON c.id = p.category_id WHERE c.id = ? ORDER BY p.name ASC', [categoryId]);
+        }
         connection.end();
 
         return allProductsData;
