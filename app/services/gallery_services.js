@@ -4,6 +4,7 @@ const uuid = require('uuid');
 const {
     getCountGalleryPages,
     getAllGalleries,
+    getAllGalleriesClient,
     getGalleryById,
     createGallery,
     updateGallery,
@@ -174,6 +175,16 @@ const deleteGalleryService = async (galleryId) => {
     }
 };
 
+const getAllGalleriesServiceClient = async () => {
+    try {
+        const galleries = await getAllGalleriesClient();
+
+        return { galleries };
+    } catch (error) {
+        throw error;
+    }
+};
+
 // Fungsi untuk menghapus file gambar galeri
 const deleteGalleryImage = async (imagePath) => {
     if (fs.existsSync(imagePath)) {
@@ -183,6 +194,7 @@ const deleteGalleryImage = async (imagePath) => {
 
 module.exports = {
     getAllGalleriesService,
+    getAllGalleriesServiceClient,
     getGalleryByIdService,
     createGalleryService,
     updateGalleryService,

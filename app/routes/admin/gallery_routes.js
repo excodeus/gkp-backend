@@ -1,7 +1,7 @@
 const express = require('express');
 const {
     getAllGalleriesAdmin,
-    getGalleryByIdAdmin,
+    getGalleryById,
     postGalleryAdmin,
     putGalleryAdmin,
     deleteGalleryAdmin
@@ -17,7 +17,7 @@ const galleryAdminFuncRouter = () => {
     // gallery administrator endpoint
     galleryRoutes.get("/", authenticateToken, getAllGalleriesAdmin);
     galleryRoutes.post("/", authenticateToken, upload.single('gallery_image'), postGalleryAdmin);
-    galleryRoutes.get("/:id", authenticateToken, getGalleryByIdAdmin);
+    galleryRoutes.get("/:id", authenticateToken, getGalleryById);
     galleryRoutes.put("/:id", authenticateToken, upload.single('gallery_image'), putGalleryAdmin);
     galleryRoutes.delete("/:id", authenticateToken, deleteGalleryAdmin);
 
