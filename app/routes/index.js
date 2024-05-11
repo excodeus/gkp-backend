@@ -13,6 +13,7 @@ const galleryClientFuncRouter = require('./client/gallery_routes');
 const articleAdminFuncRouter = require('./admin/article_routes');
 const articleClientFuncRouter = require('./client/article_routes');
 const userAdminFuncRouter = require('./admin/user_routes');
+const historyClientFuncRouter = require('./client/history_routes');
 
 // run dotenv
 require('dotenv').config()
@@ -28,6 +29,7 @@ const product_url = process.env.PRODUCT_URL;
 const gallery_url = process.env.GALLERY_URL;
 const article_url = process.env.ARTICLE_URL;
 const user_url = process.env.USER_URL;
+const whats_new_url = process.env.WHATS_NEW_URL;
 
 // client routes list grouping
 const careerRoutes = careerClientFuncRouter();
@@ -36,6 +38,8 @@ const articleClientRoutes = articleClientFuncRouter();
 routes.use(`/${article_url}`, articleClientRoutes);
 const galleryClientRoutes = galleryClientFuncRouter();
 routes.use(`/${gallery_url}`, galleryClientRoutes);
+const historyClientRoutes = historyClientFuncRouter();
+routes.use(`/${whats_new_url}`, historyClientRoutes);
 
 // admin routes list grouping
 const userAdminRoutes = userAdminFuncRouter();

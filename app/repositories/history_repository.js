@@ -1,5 +1,29 @@
 const mySQLConnection = require('../providers/mysql/index');
 
+const getAllHistoriesClient = async () => {
+    try {
+        const connection = await mySQLConnection();
+        const allHistoriesData = await connection.query('SELECT id, title, description, image_url FROM history_logs ORDER BY title ASC LIMIT 5');
+        connection.end();
+
+        return allHistoriesData;
+    } catch (error) {
+        throw error;
+    }
+};
+
+const getHistoryById = async (historyId) => {
+    try {
+        const connection = await mySQLConnection();
+        const [historyData] = await connection.query('SELECT * FROM history_logs WHERE id = ? LIMIT 1', [historyId]);
+        connection.end();
+
+        return historyData;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const createHistory = async (historyData) => {
     try {
         const connection = await mySQLConnection();
@@ -108,6 +132,8 @@ const deleteHistory = async (cpgaId) => {
 };
 
 module.exports = {
+    getAllHistoriesClient,
+    getHistoryById,
     createHistory,
     updateHistory,
     deleteHistory
