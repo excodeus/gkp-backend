@@ -41,7 +41,7 @@ const getAllProductsAdmin = async (req, res) => {
     }
 };
 
-const getProductByIdAdmin = async (req, res) => {
+const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
         const product = await getProductByIdService(id);
@@ -130,7 +130,7 @@ const deleteProductAdmin = async (req, res) => {
 
 module.exports = {
     getAllProductsAdmin,
-    getProductByIdAdmin,
+    getProductById,
     postProductAdmin,
     putProductAdmin,
     deleteProductAdmin
