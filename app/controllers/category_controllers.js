@@ -4,6 +4,7 @@ const {
     postCategoryAdminService,
     putCategoryByIdAdminService,
     deleteCategoryAdminService,
+    getAllCategoryAndProductService,
 } = require('../services/category_services');
 const {responseSuccess, responseError} = require('../utils/responses');
 const {categoryPostValidator, categoryUpdateValidator} = require('../utils/validator/category_validator');
@@ -77,9 +78,19 @@ const deleteCategoryAdmin = async(req, res) => {
     }
 };
 
+const getAllCategoryAndProduct = async (req, res) => {
+    try {
+        const categories = await getAllCategoryAndProductService();
+        return responseSuccess(true, res, httpStatus.OK, "Success get all category and product", categories);
+    } catch (error) {
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+    }
+};
+
 module.exports = {
     getAllCategoryAdmin,
     postCategoryAdmin,
     putCategoryAdmin,
     deleteCategoryAdmin,
+    getAllCategoryAndProduct,
 };

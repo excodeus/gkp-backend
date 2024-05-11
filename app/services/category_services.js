@@ -4,6 +4,9 @@ const {
     createCategory, 
     deleteCategory,
 } = require('../repositories/category_repository');
+const {
+    getAllProductByCategory,
+} = require('../repositories/product_repository');
 const uuid = require('uuid');
 const categoryModel = require('../models/category');
 
@@ -68,9 +71,31 @@ const deleteCategoryAdminService = async(id) => {
     }
 };
 
+const getAllCategoryAndProductService = async () => {
+    try {
+        const category = await getAllCategory();
+        let categories = [];
+
+        const promises = category.map(async (element) => {
+            const products = await getAllProductByCategory(element.id, true);
+            const data = {
+                [element.name]: products
+            };
+            return data;
+        });
+
+        categories = await Promise.all(promises);
+
+        return { categories };
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = {
     getAllCategoryAdminService,
     postCategoryAdminService,
     putCategoryByIdAdminService,
     deleteCategoryAdminService,
+    getAllCategoryAndProductService,
 };

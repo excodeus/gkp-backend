@@ -7,6 +7,7 @@ const yaml = require('js-yaml');
 const careerAdminFuncRouter = require('./admin/career_routes');
 const careerClientFuncRouter = require('./client/career_routes');
 const categoryAdminFuncRouter = require('./admin/category_routes');
+const categoryClientFuncRouter = require('./client/category_routes');
 const productAdminFuncRouter = require('./admin/product_routes');
 const productClientFuncRouter = require('./client/product_routes');
 const galleryAdminFuncRouter = require('./admin/gallery_routes');
@@ -43,6 +44,8 @@ const historyClientRoutes = historyClientFuncRouter();
 routes.use(`/${whats_new_url}`, historyClientRoutes);
 const productClientRoutes = productClientFuncRouter();
 routes.use(`/${product_url}`, productClientRoutes);
+const categoryClientRoutes = categoryClientFuncRouter();
+routes.use(`/${category_url}`, categoryClientRoutes);
 
 // admin routes list grouping
 const userAdminRoutes = userAdminFuncRouter();
