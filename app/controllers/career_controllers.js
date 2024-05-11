@@ -13,12 +13,14 @@ const {careerPostValidator, careerUpdateValidator} = require('../utils/validator
 const getAllCareerAdmin = async(req, res) => {
     try {
         // get query param
-        const {page, limit} = req.query;
+        let {page, limit} = req.query;
         const {status} = req.query || {};
         
         // validate required query
         if (page === undefined && limit === undefined) {
-            return responseError(res, httpStatus.BAD_REQUEST, "page or limit not should mention");
+            // default value
+            page = 1;
+            limit = 10;
         }
 
         // convert page and limit to int
@@ -27,10 +29,20 @@ const getAllCareerAdmin = async(req, res) => {
 
         // validate limit page status
         if (isNaN(pageInt) || isNaN(limitInt)) {
-            return responseError(res, httpStatus.BAD_REQUEST, "page or limit not a number");
+            // default value
+            pageInt = 1;
+            limitInt = 10;
         }
-        if (status !== "open" && status !== "closed" && status !== undefined) {
-            return responseError(res, httpStatus.BAD_REQUEST, "status should [open, closed, all]");
+        
+        switch (status) {
+            case "open":
+                break
+            case "closed":
+                break
+            case undefined:
+                break
+            default:
+                return responseError(res, httpStatus.BAD_REQUEST, "optional query status [open, closed]");
         }
         
         // should positive number
