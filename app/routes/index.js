@@ -9,6 +9,7 @@ const careerClientFuncRouter = require('./client/career_routes');
 const categoryAdminFuncRouter = require('./admin/category_routes');
 const productAdminFuncRouter = require('./admin/product_routes');
 const galleryAdminFuncRouter = require('./admin/gallery_routes');
+const galleryClientFuncRouter = require('./client/gallery_routes');
 const articleAdminFuncRouter = require('./admin/article_routes');
 const articleClientFuncRouter = require('./client/article_routes');
 const userAdminFuncRouter = require('./admin/user_routes');
@@ -33,6 +34,8 @@ const careerRoutes = careerClientFuncRouter();
 routes.use(`/${career_url}`, careerRoutes);
 const articleClientRoutes = articleClientFuncRouter();
 routes.use(`/${article_url}`, articleClientRoutes);
+const galleryClientRoutes = galleryClientFuncRouter();
+routes.use(`/${gallery_url}`, galleryClientRoutes);
 
 // admin routes list grouping
 const userAdminRoutes = userAdminFuncRouter();

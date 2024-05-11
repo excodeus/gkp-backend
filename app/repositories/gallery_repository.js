@@ -24,6 +24,18 @@ const getAllGalleries = async (limit, offset) => {
     }
 };
 
+const getAllGalleriesClient = async () => {
+    try {
+        const connection = await mySQLConnection();
+        const allGalleriesData = await connection.query('SELECT id, name, gallery_image FROM galleries ORDER BY name ASC');
+        connection.end();
+
+        return allGalleriesData;
+    } catch (error) {
+        throw error;
+    }
+};
+
 const getGalleryById = async (galleryId) => {
     try {
         const connection = await mySQLConnection();
@@ -130,6 +142,7 @@ const deleteGallery = async (galleryId) => {
 module.exports = {
     getCountGalleryPages,
     getAllGalleries,
+    getAllGalleriesClient,
     getGalleryById,
     createGallery,
     updateGallery,

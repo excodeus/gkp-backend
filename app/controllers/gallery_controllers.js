@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const {
     getAllGalleriesService,
+    getAllGalleriesServiceClient,
     getGalleryByIdService,
     createGalleryService,
     updateGalleryService,
@@ -40,7 +41,16 @@ const getAllGalleriesAdmin = async (req, res) => {
     }
 };
 
-const getGalleryByIdAdmin = async (req, res) => {
+const getAllGalleriesClient = async (req, res) => {
+    try {
+        const galleries = await getAllGalleriesServiceClient();
+        return responseSuccess(true, res, httpStatus.OK, "Success get all gallery", galleries);
+    } catch (error) {
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+    }
+};
+
+const getGalleryById = async (req, res) => {
     try {
         const { id } = req.params;
         const gallery = await getGalleryByIdService(id);
@@ -129,7 +139,8 @@ const deleteGalleryAdmin = async (req, res) => {
 
 module.exports = {
     getAllGalleriesAdmin,
-    getGalleryByIdAdmin,
+    getAllGalleriesClient,
+    getGalleryById,
     postGalleryAdmin,
     putGalleryAdmin,
     deleteGalleryAdmin
