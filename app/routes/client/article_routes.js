@@ -7,7 +7,6 @@ const {
 
 const articleClientFuncRouter = () => {
     const articleRoutes = express.Router();
-
     // article endpoint
     articleRoutes.get("/home", getAllArticlesLandingPage);
     articleRoutes.get("/", getAllArticles);
