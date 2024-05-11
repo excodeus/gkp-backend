@@ -141,11 +141,24 @@ const deleteProduct = async (productId) => {
     }
 };
 
+const getAllProductByCategory = async (categoryId) => {
+    try {
+        const connection = await mySQLConnection();
+        const allProductsData = await connection.query('SELECT p.id, p.name, p.product_image FROM products p INNER JOIN categories c ON c.id = p.category_id WHERE c.id = ? ORDER BY p.name ASC', [categoryId]);
+        connection.end();
+
+        return allProductsData;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     getCountProductPages,
     getAllProducts,
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getAllProductByCategory,
 };

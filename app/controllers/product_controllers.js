@@ -4,7 +4,8 @@ const {
     getProductByIdService,
     createProductService,
     updateProductService,
-    deleteProductService
+    deleteProductService,
+    getAllProductByCategoryService,
 } = require('../services/product_services');
 const { responseSuccess, responseError } = require('../utils/responses');
 const {productPostValidator, productUpdateValidator} = require('../utils/validator/product_validator');
@@ -41,7 +42,7 @@ const getAllProductsAdmin = async (req, res) => {
     }
 };
 
-const getProductByIdAdmin = async (req, res) => {
+const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
         const product = await getProductByIdService(id);
@@ -128,10 +129,22 @@ const deleteProductAdmin = async (req, res) => {
     }
 };
 
+
+const getAllProductsByCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const product = await getAllProductByCategoryService(id);
+        return responseSuccess(true, res, httpStatus.OK, "Success get all products by category", product);
+    } catch (error) {
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+    }
+};
+
 module.exports = {
     getAllProductsAdmin,
-    getProductByIdAdmin,
+    getProductById,
     postProductAdmin,
     putProductAdmin,
-    deleteProductAdmin
+    deleteProductAdmin,
+    getAllProductsByCategory,
 };

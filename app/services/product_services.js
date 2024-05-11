@@ -7,7 +7,8 @@ const {
     getProductById,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    getAllProductByCategory,
 } = require('../repositories/product_repository');
 const { 
     getCategoryById,
@@ -181,6 +182,16 @@ const deleteProductService = async (productId) => {
     }
 };
 
+const getAllProductByCategoryService = async (categoryId) => {
+    try {
+        const products = await getAllProductByCategory(categoryId);
+
+        return { products };
+    } catch (error) {
+        throw error;
+    }
+};
+
 // Fungsi untuk menghapus file gambar produk
 const deleteProductImage = async (imagePath) => {
     if (fs.existsSync(imagePath)) {
@@ -193,5 +204,6 @@ module.exports = {
     getProductByIdService,
     createProductService,
     updateProductService,
-    deleteProductService
+    deleteProductService,
+    getAllProductByCategoryService,
 };
