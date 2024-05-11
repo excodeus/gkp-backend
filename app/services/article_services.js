@@ -39,17 +39,14 @@ const currentMillis = Date.now();
 const getAllArticlesService = async (page, limit) => {
     try {
         // count total pages
-        const rawPage = await getCountArticlePages();
+        const totalData = await getCountArticlePages();
 
         // converter pagination
-        const {offset, totalPages} = paginateConverter(page, limit, rawPage);
-        if (page > totalPages) {
-            throw new Error("Page exceed data");
-        }
+        const {offset, totalPages} = paginateConverter(page, limit, totalData);
 
         const articles = await getAllArticles(limit, offset);
 
-        return { articles, totalPages };
+        return { articles, totalPages, totalData };
     } catch (error) {
         throw error;
     }

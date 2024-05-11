@@ -31,12 +31,9 @@ const getAllGalleriesAdmin = async (req, res) => {
         // should positive number
         +pageInt; +limitInt;
 
-        const {galleries, totalPages} = await getAllGalleriesService(pageInt, limitInt);
-        return responseSuccess(true, res, httpStatus.OK, "Success get all galleries", galleries, pageInt, limitInt, totalPages);
+        const {galleries, totalPages, totalData} = await getAllGalleriesService(pageInt, limitInt);
+        return responseSuccess(true, res, httpStatus.OK, "Success get all galleries", galleries, pageInt, limitInt, totalPages, totalData);
     } catch (error) {
-        if (error.message === "Page exceed data") {
-            return responseError(res, httpStatus.BAD_REQUEST, error.message);
-        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };

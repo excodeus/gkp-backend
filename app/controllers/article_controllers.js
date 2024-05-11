@@ -31,12 +31,10 @@ const getAllArticlesAdmin = async (req, res) => {
         // should positive number
         +pageInt; +limitInt;
 
-        const {articles, totalPages} = await getAllArticlesService(pageInt, limitInt);
-        return responseSuccess(true, res, httpStatus.OK, "Success get all articles", articles, pageInt, limitInt, totalPages);
+        const {articles, totalPages, totalData} = await getAllArticlesService(pageInt, limitInt);
+        return responseSuccess(true, res, httpStatus.OK, "Success get all articles", articles, pageInt, limitInt, totalPages, totalData);
     } catch (error) {
-        if (error.message === "Page exceed data") {
-            return responseError(res, httpStatus.BAD_REQUEST, error.message);
-        }
+        throw error
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
