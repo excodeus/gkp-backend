@@ -77,24 +77,6 @@ const createGalleryService = async (payload) => {
         const data = galleryModel(payload, true);
         const galleryId = await createGallery(data);
 
-        // create history logs
-        const historyId = "HL-" + uuid.v4();
-        const route_path = `${filepath}/${gallery_url}/${payload.id}`
-
-        history_payload = {
-            id: historyId,
-            title: payload.name,
-            description: payload.description,
-            image_url: payload.gallery_image,
-            route_path: route_path,
-            cpga_id: payload.id,
-            created_at: payload.created_at,
-            updated_at: payload.updated_at,
-        };
-
-        const historyData = historyModel(history_payload, true);
-        await createHistory(historyData);
-
         return galleryId;
     } catch (error) {
         throw error;
@@ -128,20 +110,6 @@ const updateGalleryService = async (payload) => {
         payload.updated_at = currentMillis;
         const data = galleryModel(payload, false);
         await updateGallery(payload.id, data);
-
-        // update history logs
-        const route_path = `${filepath}/${gallery_url}/${payload.id}`
-
-        history_payload = {
-            title: payload.name,
-            description: payload.description,
-            image_url: payload.gallery_image,
-            route_path: route_path,
-            updated_at: payload.updated_at,
-        };
-
-        const historyData = historyModel(history_payload, false);
-        await updateHistory(payload.id, historyData);
 
         return payload.id;
     } catch (error) {
