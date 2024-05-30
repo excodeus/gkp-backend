@@ -10,14 +10,8 @@ const {
     updateGallery,
     deleteGallery
 } = require('../repositories/gallery_repository');
-const { 
-    createHistory,
-    updateHistory,
-    deleteHistory
-} = require('../repositories/history_repository');
 const paginateConverter = require('../utils/paginate_converter');
 const galleryModel = require('../models/gallery');
-const historyModel = require('../models/history');
 
 require('dotenv').config()
 
@@ -132,8 +126,6 @@ const deleteGalleryService = async (galleryId) => {
         deleteGalleryImage(pathDelete);
 
         const deletedGalleryId = await deleteGallery(galleryId);
-        // delete history logs
-        await deleteHistory(galleryId);
         
         return { galleryId: deletedGalleryId };
     } catch (error) {
