@@ -48,10 +48,12 @@ const getArticleById = async (req, res) => {
         const article = await getArticleByIdService(id);
         return responseSuccess(true, res, httpStatus.OK, "Success get article by ID", article);
     } catch (error) {
-        if (error.message === "Article not found") {
-            return responseError(res, httpStatus.NOT_FOUND, error.message);
+        switch (error.message) {
+            case "Article not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
 
@@ -107,13 +109,15 @@ const putArticleAdmin = async (req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "Success update article", { id: articleId });
     } catch (error) {
-        if (error.message === "Article not found") {
-            return responseError(res, httpStatus.NOT_FOUND, error.message);
-        }
         if (error.message.includes('ER_DUP_ENTRY')) {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        switch (error.message) {
+            case "Article not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        }
     }
 };
 
@@ -123,10 +127,12 @@ const deleteArticleAdmin = async (req, res) => {
         await deleteArticleService(id);
         return responseSuccess(false, res, httpStatus.OK, "Success delete article", { id });
     } catch (error) {
-        if (error.message === "Article not found") {
-            return responseError(res, httpStatus.NOT_FOUND, error.message);
+        switch (error.message) {
+            case "Article not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
 
@@ -135,9 +141,6 @@ const getAllArticlesLandingPage = async (req, res) => {
         const {articles} = await getAllArticlesClientService();
         return responseSuccess(true, res, httpStatus.OK, "Success get all articles", articles);
     } catch (error) {
-        if (error.message === "Page exceed data") {
-            return responseError(res, httpStatus.BAD_REQUEST, error.message);
-        }
         return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };

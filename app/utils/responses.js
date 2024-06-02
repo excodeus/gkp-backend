@@ -1,5 +1,5 @@
 // response success json
-const responseSuccess = (isGetAll, response, statusCode, message = '', data = [], page, limit, totalPage, totalData) => {
+const responseSuccess = (isGetAll, response, statusCode, message = '', data = undefined, page, limit, totalPage, totalData) => {
     const responseData = {
         error: false,
         message: message,

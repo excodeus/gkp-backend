@@ -51,13 +51,15 @@ const putCategoryAdmin = async(req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "success update category", {id: dataId});
     } catch (error) {
-        if (error.message === "id not found") {
-            return responseError(res, httpStatus.NOT_FOUND, error.message);
-        }
         if (error.message.includes('ER_DUP_ENTRY')) {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
+        switch (error.message) {
+            case "id not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        }
     }
 };
 
@@ -71,10 +73,12 @@ const deleteCategoryAdmin = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success delete category by id", data);
     } catch (error) {
-        if (error.message === "id not found") {
-            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        switch (error.message) {
+            case "id not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };
 
