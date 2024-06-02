@@ -6,6 +6,9 @@ const {
     logoutUser,
     updateUserAdmin,
     deleteUserAdmin,
+    getUserByEmail,
+    postOTPUser,
+    updateUserPassword,
 } = require('../../controllers/user_controllers');
 const {
     authenticateToken,
@@ -23,6 +26,10 @@ const userAdminFuncRouter = () => {
     userRoutes.post("/logout", authenticateToken, logoutUser);
     userRoutes.put("/:id", authenticateToken, updateUserAdmin);
     userRoutes.delete("/:id", authenticateToken, deleteUserAdmin);
+    // reset password
+    userRoutes.post("/check-email", getUserByEmail);
+    userRoutes.post("/forget-password", postOTPUser);
+    userRoutes.post("/reset-password", updateUserPassword);
 
     return userRoutes;
 };

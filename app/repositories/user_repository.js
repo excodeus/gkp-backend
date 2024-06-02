@@ -95,34 +95,6 @@ const updateUser = async (userId, userData) => {
     }
 };
 
-const updateUserPassword = async (userData) => {
-    try {
-        const connection = await mySQLConnection();
-        const {
-            id,
-            password,
-            updated_at
-        } = userData;
-        const result = await connection.query(
-            "UPDATE users SET password = ?, updated_at = ? WHERE id = ?",
-            [
-                password,
-                updated_at,
-                id
-            ]
-        );
-        connection.end();
-
-        if (result.affectedRows === 0) {
-            throw new Error("User not found");
-        }
-
-        return id;
-    } catch (error) {
-        throw error;
-    }
-}
-
 
 const deleteUser = async (userId) => {
     try {
@@ -144,6 +116,5 @@ module.exports = {
     getUserByUsername,
     createUser,
     updateUser,
-    updateUserPassword,
     deleteUser
 };

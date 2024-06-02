@@ -84,10 +84,12 @@ const getDetailCareer = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success get career by id", data);
     } catch (error) {
-        if (error.message === "id not found") {
-            return responseError(res, httpStatus.NOT_FOUND, error.message);
+        switch (error.message) {
+            case "id not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };
 
@@ -104,13 +106,16 @@ const putCareerAdmin = async(req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "success update career", dataId);
     } catch (error) {
-        if (error.message === "id not found" || error.message === "History not found") {
-            return responseError(res, httpStatus.NOT_FOUND, error.message);
-        }
         if (error.message.includes('ER_DUP_ENTRY')) {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
+        switch (error.message) {
+            case "id not found":
+            case "History not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        }
     }
 };
 
@@ -124,10 +129,13 @@ const deleteCareerAdmin = async(req, res) => {
 
         return responseSuccess(true, res, httpStatus.OK, "success delete career by id", data);
     } catch (error) {
-        if (error.message === "id not found" || error.message === "History not found") {
-            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        switch (error.message) {
+            case "id not found":
+            case "History not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "internal server error");
     }
 };
 

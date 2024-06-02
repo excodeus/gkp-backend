@@ -115,13 +115,16 @@ const putGalleryAdmin = async (req, res) => {
 
         return responseSuccess(false, res, httpStatus.OK, "Success update gallery", { id: galleryId });
     } catch (error) {
-        if (error.message === "Gallery not found" || error.message === "History not found") {
-            return responseError(res, httpStatus.NOT_FOUND, error.message);
-        }
         if (error.message.includes('ER_DUP_ENTRY')) {
             return responseError(res, httpStatus.BAD_REQUEST, error.message);
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        switch (error.message) {
+            case "Gallery not found":
+            case "History not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        }
     }
 };
 
@@ -131,10 +134,13 @@ const deleteGalleryAdmin = async (req, res) => {
         await deleteGalleryService(id);
         return responseSuccess(false, res, httpStatus.OK, "Success delete gallery", { id });
     } catch (error) {
-        if (error.message === "Gallery not found" || error.message === "History not found") {
-            return responseError(res, httpStatus.NOT_FOUND, error.message);
+        switch (error.message) {
+            case "Gallery not found":
+            case "History not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
         }
-        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
     }
 };
 

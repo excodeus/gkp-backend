@@ -6,13 +6,18 @@ const {
     putUserByIdAdminService,
     deleteUserAdminService,
 } = require('../services/user_services');
+const {
+    sendOTPService,
+    checkUserEmailService,
+    updatePasswordService,
+} = require('../services/reset_password_services');
 const { responseSuccess, responseError } = require('../utils/responses');
 const {
     userRegisterValidator,
     userLoginValidator,
     userUpdateValidator,
-    // userUpdatePasswordValidator,
 } = require('../utils/validator/user_validator');
+const { checkEmail, sendOTP, resetPassword } = require("../utils/validator/reset_password_validator");
 
 // register user func
 const registerUser = async (req, res) => {
@@ -105,6 +110,57 @@ const deleteUserAdmin = async(req, res) => {
     }
 };
 
+const getUserByEmail = async (req, res) => {
+    try {
+        const validatedPayload = await checkEmail.validateAsync(req.body);
+        const users = await checkUserEmailService(validatedPayload);
+        return responseSuccess(true, res, httpStatus.OK, "Success check users", users);
+    } catch (error) {
+        if (error.message === "User not registered yet") {
+            return responseError(res, httpStatus.NOT_FOUND, error.message);
+        }
+        if (error.message.includes("email")){
+            return responseError(res, httpStatus.BAD_REQUEST, error.message);
+        }
+        return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+    }
+};
+
+const postOTPUser = async (req, res) => {
+    try {
+        const validatedPayload = await sendOTP.validateAsync(req.body);
+        const users = await sendOTPService(validatedPayload);
+        return responseSuccess(true, res, httpStatus.OK, "Success check users");
+    } catch (error) {
+        switch (error.message) {
+            case "Reset password not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        }
+    }
+};
+
+const updateUserPassword = async (req, res) => {
+    try {
+        const validatedPayload = await resetPassword.validateAsync(req.body);
+        await updatePasswordService(validatedPayload);
+        return responseSuccess(false, res, httpStatus.OK, "Success update user");
+    } catch (error) {
+        switch (error.message) {
+            case "OTP has expired":
+                return responseError(res, httpStatus.GONE, error.message);
+            case "User not found":
+                return responseError(res, httpStatus.NOT_FOUND, error.message);
+            case "password does not match":
+            case `"otp" length must be 6 characters long`:
+                return responseError(res, httpStatus.BAD_REQUEST, error.message);
+            default:
+                return responseError(res, httpStatus.INTERNAL_SERVER_ERROR, "Internal server error");
+        }
+    }
+}
+
 module.exports = {
     registerUser,
     loginUser,
@@ -112,4 +168,7 @@ module.exports = {
     logoutUser,
     updateUserAdmin,
     deleteUserAdmin,
+    getUserByEmail,
+    postOTPUser,
+    updateUserPassword,
 };
