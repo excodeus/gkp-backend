@@ -144,7 +144,7 @@ const deleteArticle = async (articleId) => {
 const getAllArticlesClient = async () => {
     try {
         const connection = await mySQLConnection();
-        const allArticlesData = await connection.query('SELECT id, title, content, article_image FROM articles ORDER BY updated_at ASC LIMIT 3');
+        const allArticlesData = await connection.query('SELECT id, title, content, article_image, updated_at FROM articles ORDER BY updated_at ASC LIMIT 3');
         connection.end();
 
         return allArticlesData;
