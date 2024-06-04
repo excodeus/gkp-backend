@@ -1,9 +1,9 @@
 const express = require('express');
 const httpStatus = require('http-status');
 const path = require('path');
-const swaggerUi = require('swagger-ui-express');
-const fs = require('fs');
-const yaml = require('js-yaml');
+// const swaggerUi = require('swagger-ui-express');
+// const fs = require('fs');
+// const yaml = require('js-yaml');
 const careerAdminFuncRouter = require('./admin/career_routes');
 const careerClientFuncRouter = require('./client/career_routes');
 const categoryAdminFuncRouter = require('./admin/category_routes');
@@ -67,14 +67,14 @@ routes.use(`/${administrator_url}/${article_url}`, articleAdminRoutes);
 
 // swagger
 // Read and process Swagger YAML
-const swaggerYaml = fs.readFileSync('./app/docs/swagger.yaml', 'utf8');
-const processedSwaggerYaml = swaggerYaml.replace(/\${(.*?)}/g, (match, p1) => {
-    return process.env[p1.trim()];
-});
+// const swaggerYaml = fs.readFileSync('./app/docs/swagger.yaml', 'utf8');
+// const processedSwaggerYaml = swaggerYaml.replace(/\${(.*?)}/g, (match, p1) => {
+//     return process.env[p1.trim()];
+// });
 // Load processed Swagger YAML
-const swaggerDocument = yaml.load(processedSwaggerYaml);
+// const swaggerDocument = yaml.load(processedSwaggerYaml);
 // Serve Swagger documentation
-routes.use(process.env.SWAGGER_URL, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// routes.use(process.env.SWAGGER_URL, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // show images
 const ROOT_DIR = path.resolve(__dirname, '../..');
