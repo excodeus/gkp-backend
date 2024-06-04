@@ -1,2 +1,5 @@
 .env
 node_modules
+migrations
+/storage/**
+/app/docs/**
