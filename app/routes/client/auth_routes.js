@@ -1,5 +1,6 @@
 const express = require('express');
 const {
+    registerUser,
     loginUser,
     refreshUserToken,
     logoutUser,
@@ -16,6 +17,7 @@ const authAdminFuncRouter = () => {
     const authRoutes = express.Router();
 
     // user administrator endpoint
+    authRoutes.post("/register", registerUser);
     authRoutes.post("/login", loginUser);
     authRoutes.post("/refresh-token", authenticateRefreshToken, refreshUserToken);
     authRoutes.post("/logout", authenticateToken, logoutUser);
