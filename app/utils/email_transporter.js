@@ -26,7 +26,6 @@ const sendOTPToEmail = async (email, otp, username) => {
 
         const transporter = nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
-            service: process.env.EMAIL_SERVICE,
             port: process.env.EMAIL_PORT,
             secure: process.env.EMAIL_SECURE,
             auth: {
